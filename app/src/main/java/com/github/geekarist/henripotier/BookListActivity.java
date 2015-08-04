@@ -1,41 +1,60 @@
 package com.github.geekarist.henripotier;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
-import android.widget.SimpleAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class BookListActivity extends ListActivity implements DownloagCatalogTask.BooksHandler {
 
-    private List<Map<String, Object>> catalog = new ArrayList<>();
+    private List<Book> catalog = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_list);
 
-        // TODO load bitmaps efficiently: http://goo.gl/UNDKd
-        final BaseAdapter adapter = new SimpleAdapter(
-                this,
-                catalog,
-                R.layout.activity_book_item,
-                new String[]{"title", "price", "cover"},
-                new int[]{R.id.textView, R.id.textView2, R.id.imageView});
+        final BaseAdapter adapter = new ArrayAdapter<Book>(this, R.layout.activity_book_item, catalog) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = convertView;
+                if (v == null) {
+                    LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    v = inflater.inflate(R.layout.activity_book_item, null);
+                }
+
+                Book b = catalog.get(position);
+
+                TextView titleView = (TextView) v.findViewById(R.id.titleView);
+                titleView.setText(b.title);
+
+                TextView priceView = (TextView) v.findViewById(R.id.priceView);
+                priceView.setText(String.valueOf(b.price));
+
+                ImageView imageView = (ImageView) v.findViewById(R.id.imageView);
+                imageView.setImageBitmap(b.coverBitmap);
+
+                return v;
+            }
+        };
         setListAdapter(adapter);
 
         try {
-            new DownloagCatalogTask(this).execute(new URL("http://henri-potier.xebia.fr/books"));
+            new DownloagCatalogTask(this).execute(new URL("http://henri-potier.xebia.fr"));
         } catch (MalformedURLException e) {
             Toast.makeText(this, R.string.error_retrieving_catalog, Toast.LENGTH_LONG).show();
             e.printStackTrace();
@@ -43,7 +62,7 @@ public class BookListActivity extends ListActivity implements DownloagCatalogTas
     }
 
     @Override
-    public void process(List<HashMap<String, Object>> books) {
+    public void process(List<Book> books) {
         catalog.addAll(books);
         BaseAdapter adapter = (BaseAdapter) getListView().getAdapter();
         adapter.notifyDataSetChanged();
