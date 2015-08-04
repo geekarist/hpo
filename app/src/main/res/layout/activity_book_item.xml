@@ -4,9 +4,9 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <SurfaceView
-        android:id="@+id/surfaceView"
-        android:layout_width="100dp"
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="70dp"
         android:layout_height="100dp" />
 
     <LinearLayout
