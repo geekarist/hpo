@@ -1,7 +1,6 @@
 package com.github.geekarist.henripotier;
 
 import android.app.ListActivity;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -11,9 +10,6 @@ import android.widget.BaseAdapter;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,12 +25,6 @@ public class BookListActivity extends ListActivity {
     public static final String ENDPOINT = "http://henri-potier.xebia.fr";
 
     private static final String TAG = "HenriPotierBooks";
-
-    private interface HenriPotier {
-        @GET("/books")
-        void books(Callback<List<Book>> doOnBooks);
-    }
-
     private List<Book> mCatalog = new ArrayList<>();
 
     @Override
@@ -44,7 +34,7 @@ public class BookListActivity extends ListActivity {
 
         final BaseAdapter adapter = new BookArrayAdapter(BookListActivity.this, BookListActivity.this.mCatalog);
         setListAdapter(adapter);
-
+        Picasso.with(this).setIndicatorsEnabled(BuildConfig.DEBUG);
     }
 
     @Override
@@ -112,6 +102,11 @@ public class BookListActivity extends ListActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private interface HenriPotier {
+        @GET("/books")
+        void books(Callback<List<Book>> doOnBooks);
     }
 
 }
