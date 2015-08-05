@@ -5,8 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -19,7 +21,7 @@ class BookArrayAdapter extends ArrayAdapter<Book> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View v = convertView;
         if (v == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -36,6 +38,15 @@ class BookArrayAdapter extends ArrayAdapter<Book> {
 
         ImageView imageView = (ImageView) v.findViewById(R.id.imageView);
         imageView.setImageBitmap(b.coverBitmap);
+
+        Button addToCartButton = (Button) v.findViewById(R.id.add_to_cart);
+        final View finalV = v;
+        addToCartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(finalV.getContext(), "You want " + mCatalog.get(position).title, Toast.LENGTH_LONG).show();
+            }
+        });
 
         return v;
     }
