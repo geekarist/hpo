@@ -7,6 +7,5 @@ public class Book {
     String title;
     Integer price;
     String cover;
-    Bitmap coverBitmap;
 }
 

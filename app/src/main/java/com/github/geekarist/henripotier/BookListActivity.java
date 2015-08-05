@@ -1,15 +1,39 @@
 package com.github.geekarist.henripotier;
 
 import android.app.ListActivity;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.BaseAdapter;
 
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookListActivity extends ListActivity implements DownloadCatalogTask.BooksProcessor {
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.OkClient;
+import retrofit.client.Response;
+import retrofit.http.GET;
+
+public class BookListActivity extends ListActivity {
+
+    public static final String ENDPOINT = "http://henri-potier.xebia.fr";
+
+    private static final String TAG = "HenriPotierBooks";
+
+    private interface HenriPotier {
+        @GET("/books")
+        void books(Callback<List<Book>> doOnBooks);
+    }
 
     private List<Book> mCatalog = new ArrayList<>();
 
@@ -21,14 +45,51 @@ public class BookListActivity extends ListActivity implements DownloadCatalogTas
         final BaseAdapter adapter = new BookArrayAdapter(BookListActivity.this, BookListActivity.this.mCatalog);
         setListAdapter(adapter);
 
-        new DownloadCatalogTask(this).execute();
     }
 
     @Override
-    public void processBooks(List<Book> books) {
-        mCatalog.addAll(books);
-        BaseAdapter adapter = (BaseAdapter) getListView().getAdapter();
-        adapter.notifyDataSetChanged();
+    protected void onStart() {
+        super.onStart();
+        downloadCatalog();
+    }
+
+    private void downloadCatalog() {
+        // Setup REST service
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint(ENDPOINT)
+                .setClient(new OkClient(new OkHttpClient()))
+                .build();
+        HenriPotier henriPotier = restAdapter.create(HenriPotier.class);
+
+        // Download books
+        henriPotier.books(new Callback<List<Book>>() {
+            @Override
+            public void success(List<Book> books, Response response) {
+                mCatalog.clear();
+                mCatalog.addAll(books);
+
+                // Download covers
+                for (final Book b : books) {
+                    Picasso.with(BookListActivity.this).load(b.cover).fetch(new com.squareup.picasso.Callback() {
+                        @Override
+                        public void onSuccess() {
+                            BaseAdapter adapter = (BaseAdapter) getListView().getAdapter();
+                            adapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onError() {
+                            Log.e(TAG, "Error while fetching book cover [" + b.cover + "]");
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e(TAG, "Error while retrieving books: " + error);
+            }
+        });
     }
 
     @Override
