@@ -4,12 +4,15 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.squareup.okhttp.OkHttpClient;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
 import retrofit.RestAdapter;
+import retrofit.client.OkClient;
 import retrofit.http.GET;
 
 public class DownloadCatalogTask extends AsyncTask<Void, Integer, List<Book>> {
@@ -24,7 +27,10 @@ public class DownloadCatalogTask extends AsyncTask<Void, Integer, List<Book>> {
 
     @Override
     protected List<Book> doInBackground(Void... params) {
-        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(ENDPOINT).build();
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint(ENDPOINT)
+                .setClient(new OkClient(new OkHttpClient()))
+                .build();
         HenriPotier henriPotier = restAdapter.create(HenriPotier.class);
         List<Book> books = henriPotier.books();
 
