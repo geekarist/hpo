@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.widget.BaseAdapter;
 
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,17 +22,18 @@ import retrofit.http.GET;
 public class BookListActivity extends ListActivity {
 
     public static final String ENDPOINT = "http://henri-potier.xebia.fr";
-
     private static final String TAG = "HenriPotierBooks";
+
     private List<Book> mCatalog = new ArrayList<>();
+    private BaseAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_list);
 
-        final BaseAdapter adapter = new BookArrayAdapter(BookListActivity.this, BookListActivity.this.mCatalog);
-        setListAdapter(adapter);
+        mAdapter = new BookArrayAdapter(BookListActivity.this, BookListActivity.this.mCatalog);
+        setListAdapter(mAdapter);
     }
 
     @Override
@@ -56,23 +56,7 @@ public class BookListActivity extends ListActivity {
             public void success(List<Book> books, Response response) {
                 mCatalog.clear();
                 mCatalog.addAll(books);
-
-                // Download covers
-                for (final Book b : books) {
-                    Picasso.with(BookListActivity.this).setIndicatorsEnabled(BuildConfig.DEBUG);
-                    Picasso.with(BookListActivity.this).load(b.cover).fetch(new com.squareup.picasso.Callback() {
-                        @Override
-                        public void onSuccess() {
-                            BaseAdapter adapter = (BaseAdapter) getListView().getAdapter();
-                            adapter.notifyDataSetChanged();
-                        }
-
-                        @Override
-                        public void onError() {
-                            Log.e(TAG, "Error while fetching book cover [" + b.cover + "]");
-                        }
-                    });
-                }
+                mAdapter.notifyDataSetChanged();
             }
 
             @Override

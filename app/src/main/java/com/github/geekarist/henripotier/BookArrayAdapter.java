@@ -20,6 +20,7 @@ class BookArrayAdapter extends ArrayAdapter<Book> {
     public BookArrayAdapter(BookListActivity context, List<Book> catalog) {
         super(context, R.layout.activity_book_item, catalog);
         this.mCatalog = catalog;
+        Picasso.with(context).setIndicatorsEnabled(BuildConfig.DEBUG);
     }
 
     @Override
