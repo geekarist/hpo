@@ -34,7 +34,6 @@ public class BookListActivity extends ListActivity {
 
         final BaseAdapter adapter = new BookArrayAdapter(BookListActivity.this, BookListActivity.this.mCatalog);
         setListAdapter(adapter);
-        Picasso.with(this).setIndicatorsEnabled(BuildConfig.DEBUG);
     }
 
     @Override
@@ -60,6 +59,7 @@ public class BookListActivity extends ListActivity {
 
                 // Download covers
                 for (final Book b : books) {
+                    Picasso.with(BookListActivity.this).setIndicatorsEnabled(BuildConfig.DEBUG);
                     Picasso.with(BookListActivity.this).load(b.cover).fetch(new com.squareup.picasso.Callback() {
                         @Override
                         public void onSuccess() {
