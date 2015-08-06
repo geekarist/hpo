@@ -7,50 +7,37 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.BaseAdapter;
 
-import com.squareup.okhttp.OkHttpClient;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
-import retrofit.client.OkClient;
 import retrofit.client.Response;
-import retrofit.http.GET;
 
 public class BookListActivity extends ListActivity {
 
     private static final String TAG = "HenriPotierBooks";
 
-    private List<Book> mCatalog = new ArrayList<>();
     private BaseAdapter mAdapter;
+    private PotierApplication mApplication;
+    private List<Book> mCatalog = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_list);
 
-        mAdapter = new BookArrayAdapter(BookListActivity.this, BookListActivity.this.mCatalog);
+        mApplication = (PotierApplication) getApplication();
+        mAdapter = new BookArrayAdapter(BookListActivity.this, mCatalog);
         setListAdapter(mAdapter);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        downloadCatalog();
-    }
-
-    private void downloadCatalog() {
-        // Setup REST service
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(BuildConfig.HENRI_POTIER_URL)
-                .setClient(new OkClient(new OkHttpClient()))
-                .build();
-        HenriPotier henriPotier = restAdapter.create(HenriPotier.class);
 
         // Download books
-        henriPotier.books(new Callback<List<Book>>() {
+        mApplication.getRestAdapter().books(new Callback<List<Book>>() {
             @Override
             public void success(List<Book> books, Response response) {
                 mCatalog.clear();
@@ -85,11 +72,6 @@ public class BookListActivity extends ListActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private interface HenriPotier {
-        @GET("/books")
-        void books(Callback<List<Book>> doOnBooks);
     }
 
 }
