@@ -21,7 +21,6 @@ import retrofit.http.GET;
 
 public class BookListActivity extends ListActivity {
 
-    public static final String ENDPOINT = "http://henri-potier.xebia.fr";
     private static final String TAG = "HenriPotierBooks";
 
     private List<Book> mCatalog = new ArrayList<>();
@@ -45,7 +44,7 @@ public class BookListActivity extends ListActivity {
     private void downloadCatalog() {
         // Setup REST service
         RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(ENDPOINT)
+                .setEndpoint(BuildConfig.HENRI_POTIER_URL)
                 .setClient(new OkClient(new OkHttpClient()))
                 .build();
         HenriPotier henriPotier = restAdapter.create(HenriPotier.class);
