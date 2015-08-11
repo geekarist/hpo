@@ -40,7 +40,7 @@ class BookArrayAdapter extends ArrayAdapter<Book> {
         priceView.setText(String.valueOf(b.price) + " EUR");
 
         ImageView imageView = (ImageView) v.findViewById(R.id.imageView);
-        Picasso.with(v.getContext()).load(b.cover).into(imageView);
+        Picasso.with(v.getContext()).load(b.cover).placeholder(R.drawable.book_cover_placeholder).into(imageView);
 
         Button addToCartButton = (Button) v.findViewById(R.id.add_to_cart);
         final View finalV = v;
