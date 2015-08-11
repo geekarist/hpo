@@ -27,7 +27,7 @@ public class BookListActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_list);
 
-        mApplication = (PotierApplication) getApplication();
+        mApplication = PotierApplication.instance();
         mAdapter = new BookArrayAdapter(BookListActivity.this, mCatalog);
         setListAdapter(mAdapter);
     }

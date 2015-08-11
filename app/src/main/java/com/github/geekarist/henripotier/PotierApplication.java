@@ -1,23 +1,29 @@
 package com.github.geekarist.henripotier;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.squareup.okhttp.OkHttpClient;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
-import retrofit.RetrofitError;
 import retrofit.client.OkClient;
-import retrofit.client.Response;
 import retrofit.http.GET;
 
 public class PotierApplication extends Application {
 
+    private static PotierApplication instance;
     private HenriPotier mRestAdapter;
+
+    public PotierApplication() {
+        super();
+        instance = this;
+    }
+
+    public static PotierApplication instance() {
+        return instance;
+    }
 
     @Override
     public void onCreate() {
