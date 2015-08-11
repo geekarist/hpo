@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 class BookArrayAdapter extends ArrayAdapter<Book> {
@@ -18,6 +20,7 @@ class BookArrayAdapter extends ArrayAdapter<Book> {
     public BookArrayAdapter(BookListActivity context, List<Book> catalog) {
         super(context, R.layout.activity_book_item, catalog);
         this.mCatalog = catalog;
+        Picasso.with(context).setIndicatorsEnabled(BuildConfig.DEBUG);
     }
 
     @Override
@@ -37,7 +40,7 @@ class BookArrayAdapter extends ArrayAdapter<Book> {
         priceView.setText(String.valueOf(b.price) + " EUR");
 
         ImageView imageView = (ImageView) v.findViewById(R.id.imageView);
-        imageView.setImageBitmap(b.coverBitmap);
+        Picasso.with(v.getContext()).load(b.cover).into(imageView);
 
         Button addToCartButton = (Button) v.findViewById(R.id.add_to_cart);
         final View finalV = v;

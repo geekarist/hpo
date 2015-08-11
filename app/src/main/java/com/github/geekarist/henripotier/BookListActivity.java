@@ -2,6 +2,7 @@ package com.github.geekarist.henripotier;
 
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.BaseAdapter;
@@ -9,8 +10,16 @@ import android.widget.BaseAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookListActivity extends ListActivity implements DownloadCatalogTask.BooksProcessor {
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
+public class BookListActivity extends ListActivity {
+
+    private static final String TAG = "HenriPotierBooks";
+
+    private BaseAdapter mAdapter;
+    private PotierApplication mApplication;
     private List<Book> mCatalog = new ArrayList<>();
 
     @Override
@@ -18,17 +27,29 @@ public class BookListActivity extends ListActivity implements DownloadCatalogTas
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_list);
 
-        final BaseAdapter adapter = new BookArrayAdapter(BookListActivity.this, BookListActivity.this.mCatalog);
-        setListAdapter(adapter);
-
-        new DownloadCatalogTask(this).execute();
+        mApplication = PotierApplication.instance();
+        mAdapter = new BookArrayAdapter(BookListActivity.this, mCatalog);
+        setListAdapter(mAdapter);
     }
 
     @Override
-    public void processBooks(List<Book> books) {
-        mCatalog.addAll(books);
-        BaseAdapter adapter = (BaseAdapter) getListView().getAdapter();
-        adapter.notifyDataSetChanged();
+    protected void onStart() {
+        super.onStart();
+
+        // Download books
+        mApplication.getHenriPotier().books(new Callback<List<Book>>() {
+            @Override
+            public void success(List<Book> books, Response response) {
+                mCatalog.clear();
+                mCatalog.addAll(books);
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e(TAG, "Error while retrieving books: " + error);
+            }
+        });
     }
 
     @Override
