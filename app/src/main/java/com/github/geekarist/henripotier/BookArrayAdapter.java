@@ -14,8 +14,23 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 class BookArrayAdapter extends ArrayAdapter<Book> {
     private final List<Book> mCatalog;
+
+    @Bind(R.id.titleView)
+    TextView mTitleView;
+
+    @Bind(R.id.priceView)
+    TextView mPriceView;
+
+    @Bind(R.id.imageView)
+    ImageView mImageView;
+
+    @Bind(R.id.add_to_cart)
+    Button mAddToCartButton;
 
     public BookArrayAdapter(BookListActivity context, List<Book> catalog) {
         super(context, R.layout.activity_book_item, catalog);
@@ -31,20 +46,16 @@ class BookArrayAdapter extends ArrayAdapter<Book> {
             v = inflater.inflate(R.layout.activity_book_item, null);
         }
 
+        ButterKnife.bind(this, v);
+
         Book b = mCatalog.get(position);
 
-        TextView titleView = (TextView) v.findViewById(R.id.titleView);
-        titleView.setText(b.title);
+        mTitleView.setText(b.title);
+        mPriceView.setText(String.valueOf(b.price) + " EUR");
+        Picasso.with(v.getContext()).load(b.cover).placeholder(R.drawable.book_cover_placeholder).into(mImageView);
 
-        TextView priceView = (TextView) v.findViewById(R.id.priceView);
-        priceView.setText(String.valueOf(b.price) + " EUR");
-
-        ImageView imageView = (ImageView) v.findViewById(R.id.imageView);
-        Picasso.with(v.getContext()).load(b.cover).placeholder(R.drawable.book_cover_placeholder).into(imageView);
-
-        Button addToCartButton = (Button) v.findViewById(R.id.add_to_cart);
         final View finalV = v;
-        addToCartButton.setOnClickListener(new View.OnClickListener() {
+        mAddToCartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(finalV.getContext(), "You want " + mCatalog.get(position).title, Toast.LENGTH_LONG).show();
