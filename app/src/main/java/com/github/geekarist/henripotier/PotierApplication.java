@@ -14,7 +14,7 @@ import retrofit.http.GET;
 public class PotierApplication extends Application {
 
     private static PotierApplication instance;
-    private HenriPotier mRestAdapter;
+    private HenriPotier mHenriPotier;
 
     public PotierApplication() {
         super();
@@ -34,11 +34,11 @@ public class PotierApplication extends Application {
                 .setClient(new OkClient(new OkHttpClient()))
                 .build();
 
-        this.mRestAdapter = restAdapter.create(HenriPotier.class);
+        this.mHenriPotier = restAdapter.create(HenriPotier.class);
     }
 
-    public HenriPotier getRestAdapter() {
-        return mRestAdapter;
+    public HenriPotier getHenriPotier() {
+        return mHenriPotier;
     }
 
     public interface HenriPotier {

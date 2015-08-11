@@ -37,7 +37,7 @@ public class BookListActivity extends ListActivity {
         super.onStart();
 
         // Download books
-        mApplication.getRestAdapter().books(new Callback<List<Book>>() {
+        mApplication.getHenriPotier().books(new Callback<List<Book>>() {
             @Override
             public void success(List<Book> books, Response response) {
                 mCatalog.clear();
