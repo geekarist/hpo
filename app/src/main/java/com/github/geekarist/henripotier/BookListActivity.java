@@ -1,23 +1,27 @@
 package com.github.geekarist.henripotier;
 
-import android.app.ListActivity;
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class BookListActivity extends ListActivity {
+public class BookListActivity extends Activity {
 
     private static final String TAG = "HenriPotierBooks";
-
+    @Bind(R.id.list)
+    ListView mListView;
     private BaseAdapter mAdapter;
     private PotierApplication mApplication;
     private List<Book> mCatalog = new ArrayList<>();
@@ -25,11 +29,15 @@ public class BookListActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_book_list);
 
+        ButterKnife.bind(this);
+
         mApplication = PotierApplication.instance();
-        mAdapter = new BookArrayAdapter(BookListActivity.this, mCatalog);
-        setListAdapter(mAdapter);
+        mAdapter = new BookArrayAdapter(this, mCatalog);
+
+        mListView.setAdapter(mAdapter);
     }
 
     @Override
