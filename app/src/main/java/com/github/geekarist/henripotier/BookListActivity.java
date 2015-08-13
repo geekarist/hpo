@@ -5,10 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -22,9 +20,8 @@ public class BookListActivity extends Activity {
     private static final String TAG = "HenriPotierBooks";
     @Bind(R.id.list)
     ListView mListView;
-    private BaseAdapter mAdapter;
+    private BookCatalogAdapter mAdapter;
     private PotierApplication mApplication;
-    private List<Book> mCatalog = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +32,7 @@ public class BookListActivity extends Activity {
         ButterKnife.bind(this);
 
         mApplication = PotierApplication.instance();
-        mAdapter = new BookCatalogAdapter(this, mCatalog);
+        mAdapter = new BookCatalogAdapter(this);
 
         mListView.setAdapter(mAdapter);
     }
@@ -48,9 +45,8 @@ public class BookListActivity extends Activity {
         mApplication.getHenriPotier().books(new Callback<List<Book>>() {
             @Override
             public void success(List<Book> books, Response response) {
-                mCatalog.clear();
-                mCatalog.addAll(books);
-                mAdapter.notifyDataSetChanged();
+                mAdapter.clear();
+                mAdapter.addAll(books);
             }
 
             @Override

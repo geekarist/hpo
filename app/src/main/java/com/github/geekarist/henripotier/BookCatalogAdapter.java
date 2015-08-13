@@ -1,5 +1,6 @@
 package com.github.geekarist.henripotier;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,28 +13,25 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 class BookCatalogAdapter extends BaseAdapter {
-    private final List<Book> mCatalog;
-
     @Bind(R.id.titleView)
     TextView mTitleView;
-
     @Bind(R.id.priceView)
     TextView mPriceView;
-
     @Bind(R.id.imageView)
     ImageView mImageView;
-
     @Bind(R.id.add_to_cart)
     Button mAddToCartButton;
+    private List<Book> mCatalog;
 
-    public BookCatalogAdapter(BookListActivity context, List<Book> catalog) {
-        this.mCatalog = catalog;
+    public BookCatalogAdapter(Activity context) {
+        mCatalog = new ArrayList<>();
         Picasso.with(context).setIndicatorsEnabled(BuildConfig.DEBUG);
     }
 
@@ -50,6 +48,16 @@ class BookCatalogAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    public void clear() {
+        mCatalog.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addAll(List<Book> books) {
+        mCatalog.addAll(books);
+        notifyDataSetChanged();
     }
 
     @Override
