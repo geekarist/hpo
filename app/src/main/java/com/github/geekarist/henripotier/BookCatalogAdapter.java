@@ -73,7 +73,7 @@ class BookCatalogAdapter extends BaseAdapter {
         Book b = mCatalog.get(position);
 
         mTitleView.setText(b.title);
-        mPriceView.setText(String.valueOf(b.price) + " EUR");
+        mPriceView.setText(parent.getResources().getString(R.string.price, b.price));
         Picasso.with(v.getContext()).load(b.cover).placeholder(R.drawable.book_cover_placeholder).into(mImageView);
 
         final View finalV = v;

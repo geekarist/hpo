@@ -18,8 +18,10 @@ import retrofit.client.Response;
 public class BookListActivity extends Activity {
 
     private static final String TAG = "HenriPotierBooks";
+
     @Bind(R.id.list)
     ListView mListView;
+
     private BookCatalogAdapter mAdapter;
     private PotierApplication mApplication;
 
