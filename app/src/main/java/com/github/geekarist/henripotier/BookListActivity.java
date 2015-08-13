@@ -35,7 +35,7 @@ public class BookListActivity extends Activity {
         ButterKnife.bind(this);
 
         mApplication = PotierApplication.instance();
-        mAdapter = new BookArrayAdapter(this, mCatalog);
+        mAdapter = new BookCatalogAdapter(this, mCatalog);
 
         mListView.setAdapter(mAdapter);
     }

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,7 +17,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-class BookArrayAdapter extends ArrayAdapter<Book> {
+class BookCatalogAdapter extends BaseAdapter {
     private final List<Book> mCatalog;
 
     @Bind(R.id.titleView)
@@ -32,17 +32,31 @@ class BookArrayAdapter extends ArrayAdapter<Book> {
     @Bind(R.id.add_to_cart)
     Button mAddToCartButton;
 
-    public BookArrayAdapter(BookListActivity context, List<Book> catalog) {
-        super(context, R.layout.activity_book_item, catalog);
+    public BookCatalogAdapter(BookListActivity context, List<Book> catalog) {
         this.mCatalog = catalog;
         Picasso.with(context).setIndicatorsEnabled(BuildConfig.DEBUG);
+    }
+
+    @Override
+    public int getCount() {
+        return mCatalog.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return mCatalog.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View v = convertView;
         if (v == null) {
-            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = inflater.inflate(R.layout.activity_book_item, null);
         }
 
