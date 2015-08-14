@@ -2,7 +2,6 @@ package com.github.geekarist.henripotier;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -14,10 +13,9 @@ import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import timber.log.Timber;
 
 public class BookListActivity extends Activity {
-
-    private static final String TAG = "HenriPotierBooks";
 
     @Bind(R.id.list)
     ListView mListView;
@@ -53,7 +51,8 @@ public class BookListActivity extends Activity {
 
             @Override
             public void failure(RetrofitError error) {
-                Log.e(TAG, "Error while retrieving books: " + error);
+                // The RetrofitError is not logged. See https://github.com/JakeWharton/timber/issues/66
+                Timber.e(error, "Error while retrieving books");
             }
         });
     }
