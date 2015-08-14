@@ -45,7 +45,6 @@ public class BookListActivity extends Activity {
         mApplication.getHenriPotier().books(new Callback<List<Book>>() {
             @Override
             public void success(List<Book> books, Response response) {
-                mAdapter.clear();
                 mAdapter.addAll(books);
             }
 

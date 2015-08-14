@@ -28,7 +28,8 @@ class BookCatalogAdapter extends BaseAdapter {
     ImageView mImageView;
     @Bind(R.id.add_to_cart)
     Button mAddToCartButton;
-    private List<Book> mCatalog;
+
+    private final List<Book> mCatalog;
 
     public BookCatalogAdapter(Activity context) {
         mCatalog = new ArrayList<>();
@@ -50,12 +51,8 @@ class BookCatalogAdapter extends BaseAdapter {
         return position;
     }
 
-    public void clear() {
-        mCatalog.clear();
-        notifyDataSetChanged();
-    }
-
     public void addAll(List<Book> books) {
+        mCatalog.clear();
         mCatalog.addAll(books);
         notifyDataSetChanged();
     }
@@ -64,7 +61,7 @@ class BookCatalogAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         View v = convertView;
         if (v == null) {
-            LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             v = inflater.inflate(R.layout.activity_book_item, null);
         }
 
