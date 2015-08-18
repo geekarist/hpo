@@ -77,7 +77,7 @@ class BookCatalogAdapter extends BaseAdapter {
         mAddToCartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(finalV.getContext(), "You want " + mCatalog.get(position).title, Toast.LENGTH_LONG).show();
+                Toast.makeText(finalV.getContext(), view.getResources().getString(R.string.buy_book_msg, mCatalog.get(position).title), Toast.LENGTH_LONG).show();
             }
         });
 
