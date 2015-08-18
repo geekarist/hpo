@@ -50,7 +50,7 @@ public class BookListActivity extends Activity {
 
             @Override
             public void failure(RetrofitError error) {
-                // The RetrofitError is not logged. See https://github.com/JakeWharton/timber/issues/66
+                // UnknownException is not logged, see android.util.Log.getStackTraceString
                 Timber.e(error, "Error while retrieving books");
             }
         });
