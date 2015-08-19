@@ -1,6 +1,7 @@
 package com.github.geekarist.henripotier;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,8 +78,7 @@ class BookCatalogAdapter extends BaseAdapter {
         mAddToCartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String msg = mContext.getResources().getString(R.string.buy_book_msg, b.title);
-                Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
+                mContext.startActivity(new Intent(mContext, CartActivity.class));
             }
         });
 
