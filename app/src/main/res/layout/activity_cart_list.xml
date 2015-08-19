@@ -6,7 +6,7 @@
     android:layout_alignParentRight="true"
     android:layout_alignParentTop="true"
     android:orientation="vertical"
-    tools:context=".BookListActivity">
+    tools:context=".CartActivity">
 
     <TextView
         android:id="@+id/total"
@@ -22,7 +22,7 @@
     <TextView
         android:id="@android:id/empty"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/no_data" />
 
     <Button
