@@ -4,7 +4,7 @@
     <string name="action_settings">Réglages</string>
     <string name="add_to_cart">Ajouter au panier</string>
     <string name="error_retrieving_catalog">Erreur de récupération du catalogue</string>
-    <string name="continue_shopping">Continuer</string>
+    <string name="continue_shopping">Continuer vos achats</string>
     <string name="no_data">Pas de données</string>
     <string name="default_total">Total : 0 EUR</string>
     <string name="price">%d EUR</string>
