@@ -1,7 +1,6 @@
 package com.github.geekarist.henripotier;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,7 +23,7 @@ public class CartActivity extends Activity {
         continueShoppingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(CartActivity.this, BookListActivity.class));
+                finish();
             }
         });
     }
