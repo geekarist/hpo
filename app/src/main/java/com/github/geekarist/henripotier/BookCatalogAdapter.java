@@ -9,7 +9,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -74,7 +73,6 @@ class BookCatalogAdapter extends BaseAdapter {
         mPriceView.setText(parent.getResources().getString(R.string.price, b.price));
         Picasso.with(mContext).load(b.cover).placeholder(R.drawable.book_cover_placeholder).into(mImageView);
 
-        final View finalV = v;
         mAddToCartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
