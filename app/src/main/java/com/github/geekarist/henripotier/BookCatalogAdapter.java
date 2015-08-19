@@ -1,6 +1,5 @@
 package com.github.geekarist.henripotier;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +19,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 class BookCatalogAdapter extends BaseAdapter {
+    private final List<Book> mCatalog;
+    private final Context mContext;
     @Bind(R.id.titleView)
     TextView mTitleView;
     @Bind(R.id.priceView)
@@ -29,10 +30,9 @@ class BookCatalogAdapter extends BaseAdapter {
     @Bind(R.id.add_to_cart)
     Button mAddToCartButton;
 
-    private final List<Book> mCatalog;
-
-    public BookCatalogAdapter(Activity context) {
+    public BookCatalogAdapter(Context context) {
         mCatalog = new ArrayList<>();
+        mContext = context;
         Picasso.with(context).setIndicatorsEnabled(BuildConfig.DEBUG);
     }
 
@@ -61,23 +61,24 @@ class BookCatalogAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         View v = convertView;
         if (v == null) {
-            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+            LayoutInflater inflater = LayoutInflater.from(mContext);
             v = inflater.inflate(R.layout.activity_book_item, null);
         }
 
         ButterKnife.bind(this, v);
 
-        Book b = mCatalog.get(position);
+        final Book b = mCatalog.get(position);
 
         mTitleView.setText(b.title);
         mPriceView.setText(parent.getResources().getString(R.string.price, b.price));
-        Picasso.with(v.getContext()).load(b.cover).placeholder(R.drawable.book_cover_placeholder).into(mImageView);
+        Picasso.with(mContext).load(b.cover).placeholder(R.drawable.book_cover_placeholder).into(mImageView);
 
         final View finalV = v;
         mAddToCartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(finalV.getContext(), view.getResources().getString(R.string.buy_book_msg, mCatalog.get(position).title), Toast.LENGTH_LONG).show();
+                String msg = mContext.getResources().getString(R.string.buy_book_msg, b.title);
+                Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
             }
         });
 
