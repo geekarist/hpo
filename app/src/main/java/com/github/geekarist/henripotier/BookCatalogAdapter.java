@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
 class BookCatalogAdapter extends BaseAdapter {
     private final List<Book> mCatalog;
     private final Context mContext;
+
     @Bind(R.id.titleView)
     TextView mTitleView;
     @Bind(R.id.priceView)
@@ -76,7 +77,9 @@ class BookCatalogAdapter extends BaseAdapter {
         mAddToCartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mContext.startActivity(new Intent(mContext, CartActivity.class));
+                Intent intent = new Intent(mContext, CartActivity.class);
+                intent.putExtra("purchasedBook", b);
+                mContext.startActivity(intent);
             }
         });
 
