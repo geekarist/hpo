@@ -1,35 +1,40 @@
 package com.github.geekarist.henripotier;
 
-import android.app.ListActivity;
+import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.BaseAdapter;
+import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import timber.log.Timber;
 
-public class BookListActivity extends ListActivity {
+public class BookListActivity extends Activity {
 
-    private static final String TAG = "HenriPotierBooks";
+    @Bind(R.id.list)
+    ListView mListView;
 
-    private BaseAdapter mAdapter;
+    private BookCatalogAdapter mAdapter;
     private PotierApplication mApplication;
-    private List<Book> mCatalog = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_book_list);
 
+        ButterKnife.bind(this);
+
         mApplication = PotierApplication.instance();
-        mAdapter = new BookArrayAdapter(BookListActivity.this, mCatalog);
-        setListAdapter(mAdapter);
+        mAdapter = new BookCatalogAdapter(this);
+
+        mListView.setAdapter(mAdapter);
     }
 
     @Override
@@ -40,14 +45,13 @@ public class BookListActivity extends ListActivity {
         mApplication.getHenriPotier().books(new Callback<List<Book>>() {
             @Override
             public void success(List<Book> books, Response response) {
-                mCatalog.clear();
-                mCatalog.addAll(books);
-                mAdapter.notifyDataSetChanged();
+                mAdapter.addAll(books);
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Log.e(TAG, "Error while retrieving books: " + error);
+                // UnknownException is not logged, see android.util.Log.getStackTraceString
+                Timber.e(error, "Error while retrieving books");
             }
         });
     }

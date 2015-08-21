@@ -10,6 +10,7 @@ import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import retrofit.http.GET;
+import timber.log.Timber;
 
 public class PotierApplication extends Application {
 
@@ -28,6 +29,10 @@ public class PotierApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
 
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(BuildConfig.HENRI_POTIER_URL)
