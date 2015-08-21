@@ -25,6 +25,14 @@ public class CartActivity extends Activity {
 
         ButterKnife.bind(this);
 
+        mAdapter = new CartAdapter(this);
+        mListView.setAdapter(mAdapter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
         continueShoppingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,8 +43,5 @@ public class CartActivity extends Activity {
         Book purchasedBook = (Book) getIntent().getSerializableExtra("purchasedBook");
         Toast.makeText(this, getResources().getString(R.string.buy_book_msg, purchasedBook.title), Toast.LENGTH_LONG).show();
         mAdapter.add(purchasedBook);
-
-        mAdapter = new CartAdapter(this);
-        mListView.setAdapter(mAdapter);
     }
 }

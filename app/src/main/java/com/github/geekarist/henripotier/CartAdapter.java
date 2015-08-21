@@ -47,13 +47,13 @@ public class CartAdapter extends BaseAdapter {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
-            view = inflater.inflate(R.layout.activity_cart_item, parent);
+            view = inflater.inflate(R.layout.activity_cart_item, null);
 
         }
         ButterKnife.bind(this, view);
         Book book = (Book) getItem(position);
         mTitleView.setText(book.title);
-        mPriceView.setText(book.price);
+        mPriceView.setText(mContext.getResources().getString(R.string.price, book.price));
         return view;
     }
 
