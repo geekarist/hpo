@@ -16,6 +16,7 @@ public class CartActivity extends Activity {
     Button continueShoppingButton;
     @Bind(R.id.cart_list)
     ListView mListView;
+
     private CartAdapter mAdapter;
 
     @Override
@@ -41,7 +42,6 @@ public class CartActivity extends Activity {
         });
 
         Book purchasedBook = (Book) getIntent().getSerializableExtra("purchasedBook");
-        Toast.makeText(this, getResources().getString(R.string.buy_book_msg, purchasedBook.title), Toast.LENGTH_LONG).show();
         mAdapter.add(purchasedBook);
     }
 }

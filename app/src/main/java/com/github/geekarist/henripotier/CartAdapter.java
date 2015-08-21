@@ -5,7 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +25,8 @@ public class CartAdapter extends BaseAdapter {
     TextView mTitleView;
     @Bind(R.id.cartItemPriceView)
     TextView mPriceView;
+    @Bind(R.id.cartItemImageView)
+    ImageView mImageView;
 
     public CartAdapter(Context context) {
         this.mContext = context;
@@ -54,6 +59,7 @@ public class CartAdapter extends BaseAdapter {
         Book book = (Book) getItem(position);
         mTitleView.setText(book.title);
         mPriceView.setText(mContext.getResources().getString(R.string.price, book.price));
+        Picasso.with(mContext).load(book.cover).placeholder(R.drawable.book_cover_placeholder).into(mImageView);
         return view;
     }
 
