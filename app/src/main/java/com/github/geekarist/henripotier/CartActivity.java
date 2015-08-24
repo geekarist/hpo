@@ -26,7 +26,7 @@ public class CartActivity extends Activity {
 
         ButterKnife.bind(this);
 
-        mAdapter = new CartAdapter(this);
+        mAdapter = CartAdapter.newInstance(this);
         mListView.setAdapter(mAdapter);
     }
 

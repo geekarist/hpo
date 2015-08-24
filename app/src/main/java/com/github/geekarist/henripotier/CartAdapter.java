@@ -13,16 +13,13 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class CartAdapter extends CursorAdapter {
 
-    private final List<Book> mCartItems = new ArrayList<>();
     private final Context mContext;
+    private final DatabaseHelper mDbHelper;
 
     @Bind(R.id.cartItemTitleView)
     TextView mTitleView;
@@ -31,24 +28,16 @@ public class CartAdapter extends CursorAdapter {
     @Bind(R.id.cartItemImageView)
     ImageView mImageView;
 
-    private CartAdapter(Context context, Cursor cursor) {
+    private CartAdapter(Context context, DatabaseHelper helper, Cursor cursor) {
         super(context, cursor, false);
+        this.mDbHelper = helper;
         this.mContext = context;
     }
 
     public static CartAdapter newInstance(Context context) {
-        Cursor cursor = new DatabaseHelper(context, null, null, 0).getWritableDatabase().rawQuery("SELECT * FROM book", null);
-        return new CartAdapter(context, cursor);
-    }
-
-    @Override
-    public int getCount() {
-        return mCartItems.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return mCartItems.get(position);
+        DatabaseHelper dbHelper = new DatabaseHelper(context, null, null, 1);
+        Cursor cursor = dbHelper.getWritableDatabase().rawQuery("SELECT * FROM book", null);
+        return new CartAdapter(context, dbHelper, cursor);
     }
 
     @Override
@@ -79,11 +68,10 @@ public class CartAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-
     }
 
     public void add(Book purchasedBook) {
-        mCartItems.add(purchasedBook);
+        mDbHelper.insert(purchasedBook);
         notifyDataSetChanged();
     }
 
@@ -94,7 +82,7 @@ public class CartAdapter extends CursorAdapter {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL("CREATE TABLE book (id INTEGER PRIMARY KEY, isbn TEXT, title TEXT, price INTEGER, cover TEXT");
+            db.execSQL("CREATE TABLE book (_id INTEGER PRIMARY KEY AUTOINCREMENT, isbn TEXT, title TEXT, price INTEGER, cover TEXT)");
         }
 
         @Override
@@ -104,8 +92,8 @@ public class CartAdapter extends CursorAdapter {
 
         public void insert(Book book) {
             SQLiteDatabase db = getWritableDatabase();
-            db.execSQL("INSERT INTO book VALUES (id, isbn, title, price, cover) SET (%d, %s, %s, %d, %s)");
-            // TODO
+            db.execSQL("INSERT INTO book (isbn, title, price, cover) VALUES (?, ?, ?, ?)",
+                    new Object[]{book.isbn, book.title, book.price, book.cover});
         }
     }
 }
