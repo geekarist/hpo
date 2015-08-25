@@ -2,9 +2,6 @@ package com.github.geekarist.henripotier;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +13,11 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 public class CartAdapter extends CursorAdapter {
 
     private final Context mContext;
-    private final DatabaseHelper mDbHelper;
+    private final CartDatabaseHelper mDbHelper;
 
     @Bind(R.id.cartItemTitleView)
     TextView mTitleView;
@@ -30,14 +26,14 @@ public class CartAdapter extends CursorAdapter {
     @Bind(R.id.cartItemImageView)
     ImageView mImageView;
 
-    private CartAdapter(Context context, DatabaseHelper helper, Cursor cursor) {
+    private CartAdapter(Context context, CartDatabaseHelper helper, Cursor cursor) {
         super(context, cursor, false);
         this.mDbHelper = helper;
         this.mContext = context;
     }
 
     public static CartAdapter newInstance(Context context) {
-        DatabaseHelper dbHelper = new DatabaseHelper(context, null, null, 1);
+        CartDatabaseHelper dbHelper = PotierApplication.instance().getDbHelper();
         Cursor cursor = dbHelper.getReadableDatabase().rawQuery("SELECT * FROM book", null);
         return new CartAdapter(context, dbHelper, cursor);
     }
@@ -84,41 +80,4 @@ public class CartAdapter extends CursorAdapter {
         notifyDataSetChanged();
     }
 
-    private static class DatabaseHelper extends SQLiteOpenHelper {
-        public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-            super(context, name, factory, version);
-        }
-
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-            db.execSQL("CREATE TABLE book (_id INTEGER PRIMARY KEY AUTOINCREMENT, isbn TEXT, title TEXT, price INTEGER, cover TEXT)");
-        }
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            db.execSQL("DROP TABLE IF EXISTS book");
-        }
-
-        public void insert(Book book) {
-            SQLiteDatabase db = getWritableDatabase();
-            try {
-                db.beginTransaction();
-                db.execSQL("INSERT INTO book (isbn, title, price, cover) VALUES (?, ?, ?, ?)",
-                        new Object[]{book.isbn, book.title, book.price, book.cover});
-                db.setTransactionSuccessful();
-            } catch (SQLException e) {
-                Timber.e("Error while inserting book", e);
-            } finally {
-                db.endTransaction();
-            }
-        }
-
-        public Book getBook(Cursor cursor) {
-            String isbn = cursor.getString(1);
-            String title = cursor.getString(2);
-            Integer price = cursor.getInt(3);
-            String cover = cursor.getString(4);
-            return new Book(isbn, title, price, cover);
-        }
-    }
 }
