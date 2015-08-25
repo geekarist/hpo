@@ -79,6 +79,8 @@ public class CartAdapter extends CursorAdapter {
 
     public void add(Book purchasedBook) {
         mDbHelper.insert(purchasedBook);
+        Cursor cursor = mDbHelper.getReadableDatabase().rawQuery("SELECT * FROM book", null);
+        swapCursor(cursor);
         notifyDataSetChanged();
     }
 
