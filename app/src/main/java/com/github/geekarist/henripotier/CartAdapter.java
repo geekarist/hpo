@@ -34,28 +34,12 @@ public class CartAdapter extends CursorAdapter {
 
     public static CartAdapter newInstance(Context context) {
         CartDatabaseHelper dbHelper = PotierApplication.instance().getDbHelper();
-        Cursor cursor = dbHelper.getReadableDatabase().rawQuery("SELECT * FROM book", null);
-        return new CartAdapter(context, dbHelper, cursor);
+        return new CartAdapter(context, dbHelper, dbHelper.createCursor());
     }
 
     @Override
     public long getItemId(int position) {
         return position;
-    }
-
-    public View getView2(int position, View convertView, ViewGroup parent) {
-        View view = convertView;
-        if (view == null) {
-            LayoutInflater inflater = LayoutInflater.from(mContext);
-            view = inflater.inflate(R.layout.activity_cart_item, null);
-
-        }
-        ButterKnife.bind(this, view);
-        Book book = (Book) getItem(position);
-        mTitleView.setText(book.title);
-        mPriceView.setText(mContext.getResources().getString(R.string.price, book.price));
-        Picasso.with(mContext).load(book.cover).placeholder(R.drawable.book_cover_placeholder).into(mImageView);
-        return view;
     }
 
     @Override
@@ -75,7 +59,7 @@ public class CartAdapter extends CursorAdapter {
 
     public void add(Book purchasedBook) {
         mDbHelper.insert(purchasedBook);
-        Cursor cursor = mDbHelper.getReadableDatabase().rawQuery("SELECT * FROM book", null);
+        Cursor cursor = mDbHelper.createCursor();
         swapCursor(cursor);
         notifyDataSetChanged();
     }

@@ -44,4 +44,8 @@ class CartDatabaseHelper extends SQLiteOpenHelper {
         String cover = cursor.getString(4);
         return new Book(isbn, title, price, cover);
     }
+
+    public Cursor createCursor() {
+        return getReadableDatabase().rawQuery("SELECT * FROM book", null);
+    }
 }
