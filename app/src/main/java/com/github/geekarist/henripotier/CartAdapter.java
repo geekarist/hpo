@@ -2,6 +2,7 @@ package com.github.geekarist.henripotier;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class CartAdapter extends CursorAdapter {
 
@@ -36,7 +38,7 @@ public class CartAdapter extends CursorAdapter {
 
     public static CartAdapter newInstance(Context context) {
         DatabaseHelper dbHelper = new DatabaseHelper(context, null, null, 1);
-        Cursor cursor = dbHelper.getWritableDatabase().rawQuery("SELECT * FROM book", null);
+        Cursor cursor = dbHelper.getReadableDatabase().rawQuery("SELECT * FROM book", null);
         return new CartAdapter(context, dbHelper, cursor);
     }
 
@@ -45,8 +47,7 @@ public class CartAdapter extends CursorAdapter {
         return position;
     }
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView2(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -63,11 +64,17 @@ public class CartAdapter extends CursorAdapter {
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        return null;
+        LayoutInflater inflater = LayoutInflater.from(mContext);
+        return inflater.inflate(R.layout.activity_cart_item, null);
     }
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
+        ButterKnife.bind(this, view);
+        Book book = mDbHelper.getBook(cursor);
+        mTitleView.setText(book.title);
+        mPriceView.setText(mContext.getResources().getString(R.string.price, book.price));
+        Picasso.with(mContext).load(book.cover).placeholder(R.drawable.book_cover_placeholder).into(mImageView);
     }
 
     public void add(Book purchasedBook) {
@@ -92,8 +99,24 @@ public class CartAdapter extends CursorAdapter {
 
         public void insert(Book book) {
             SQLiteDatabase db = getWritableDatabase();
-            db.execSQL("INSERT INTO book (isbn, title, price, cover) VALUES (?, ?, ?, ?)",
-                    new Object[]{book.isbn, book.title, book.price, book.cover});
+            try {
+                db.beginTransaction();
+                db.execSQL("INSERT INTO book (isbn, title, price, cover) VALUES (?, ?, ?, ?)",
+                        new Object[]{book.isbn, book.title, book.price, book.cover});
+                db.setTransactionSuccessful();
+            } catch (SQLException e) {
+                Timber.e("Error while inserting book", e);
+            } finally {
+                db.endTransaction();
+            }
+        }
+
+        public Book getBook(Cursor cursor) {
+            String isbn = cursor.getString(1);
+            String title = cursor.getString(2);
+            Integer price = cursor.getInt(3);
+            String cover = cursor.getString(4);
+            return new Book(isbn, title, price, cover);
         }
     }
 }
