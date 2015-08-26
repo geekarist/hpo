@@ -9,4 +9,5 @@
     <string name="default_total">Total : 0 EUR</string>
     <string name="price">%d EUR</string>
     <string name="buy_book_msg">Vous voulez %s</string>
+    <string name="remove_from_cart">Enlever du panier</string>
 </resources>
