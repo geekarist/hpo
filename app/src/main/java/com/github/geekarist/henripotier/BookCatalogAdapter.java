@@ -85,4 +85,9 @@ class BookCatalogAdapter extends BaseAdapter {
 
         return v;
     }
+
+    public void clear() {
+        mCatalog.clear();
+        notifyDataSetChanged();
+    }
 }

@@ -28,6 +28,11 @@ public class CartActivity extends Activity {
         setContentView(R.layout.activity_cart_list);
 
         ButterKnife.bind(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
 
         getLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<Cursor>() {
             @Override
@@ -55,17 +60,18 @@ public class CartActivity extends Activity {
                 // TODO
             }
         });
+
+        continueShoppingButton.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            finish();
+        }
+    });
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        continueShoppingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+    protected void onStop() {
+        super.onStop();
+        getLoaderManager().destroyLoader(0);
     }
 }
