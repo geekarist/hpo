@@ -26,15 +26,10 @@ public class CartAdapter extends CursorAdapter {
     @Bind(R.id.cartItemImageView)
     ImageView mImageView;
 
-    private CartAdapter(Context context, CartDatabaseHelper helper, Cursor cursor) {
+    public CartAdapter(Context context, CartDatabaseHelper helper, Cursor cursor) {
         super(context, cursor, false);
         this.mDbHelper = helper;
         this.mContext = context;
-    }
-
-    public static CartAdapter newInstance(Context context) {
-        CartDatabaseHelper dbHelper = PotierApplication.instance().getDbHelper();
-        return new CartAdapter(context, dbHelper, dbHelper.createCursor());
     }
 
     @Override

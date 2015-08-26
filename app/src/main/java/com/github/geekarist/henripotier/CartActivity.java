@@ -1,11 +1,14 @@
 package com.github.geekarist.henripotier;
 
 import android.app.Activity;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -26,8 +29,32 @@ public class CartActivity extends Activity {
 
         ButterKnife.bind(this);
 
-        mAdapter = CartAdapter.newInstance(this);
-        mListView.setAdapter(mAdapter);
+        getLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<Cursor>() {
+            @Override
+            public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+                return new CursorLoader(CartActivity.this) {
+                    @Override
+                    public Cursor loadInBackground() {
+                        // TODO Observe db change: http://stackoverflow.com/a/27385022/1665730
+                        return PotierApplication.instance().getDbHelper().createCursor();
+                    }
+                };
+            }
+
+            @Override
+            public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+                mAdapter = new CartAdapter(CartActivity.this, PotierApplication.instance().getDbHelper(), data);
+                mListView.setAdapter(mAdapter);
+
+                Book purchasedBook = (Book) getIntent().getSerializableExtra("purchasedBook");
+                mAdapter.add(purchasedBook);
+            }
+
+            @Override
+            public void onLoaderReset(Loader<Cursor> loader) {
+                // TODO
+            }
+        });
     }
 
     @Override
@@ -40,8 +67,5 @@ public class CartActivity extends Activity {
                 finish();
             }
         });
-
-        Book purchasedBook = (Book) getIntent().getSerializableExtra("purchasedBook");
-        mAdapter.add(purchasedBook);
     }
 }
