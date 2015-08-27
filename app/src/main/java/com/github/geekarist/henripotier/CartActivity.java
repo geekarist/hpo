@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -19,6 +20,8 @@ public class CartActivity extends Activity {
     Button continueShoppingButton;
     @Bind(R.id.cart_list)
     ListView mListView;
+    @Bind(R.id.total)
+    TextView mTotalView;
 
     private CartAdapter mAdapter;
 
@@ -52,6 +55,9 @@ public class CartActivity extends Activity {
 
                 Book purchasedBook = (Book) getIntent().getSerializableExtra("purchasedBook");
                 mAdapter.add(purchasedBook);
+
+                mTotalView.setText(getResources().getString(
+                        R.string.cart_total, PotierApplication.instance().getDbHelper().total()));
             }
 
             @Override

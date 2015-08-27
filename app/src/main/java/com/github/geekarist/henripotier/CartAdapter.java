@@ -62,6 +62,7 @@ public class CartAdapter extends CursorAdapter {
                 Cursor cursor = mDbHelper.createCursor();
                 swapCursor(cursor);
                 notifyDataSetChanged();
+                // TODO reload cart total
             }
         });
     }

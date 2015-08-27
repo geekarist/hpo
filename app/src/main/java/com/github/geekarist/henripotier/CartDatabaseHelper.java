@@ -57,4 +57,13 @@ class CartDatabaseHelper extends SQLiteOpenHelper {
     public void delete(Book book) {
         execInTransaction("DELETE FROM book WHERE book._id = ?", "Error while deleting book", new Object[]{book.id});
     }
+
+    public int total() {
+        Cursor cursor = getReadableDatabase().rawQuery("SELECT SUM(price) FROM book", null);
+        cursor.moveToFirst();
+        if (cursor.getCount() == 0) {
+            return 0;
+        }
+        return cursor.getInt(0);
+    }
 }
