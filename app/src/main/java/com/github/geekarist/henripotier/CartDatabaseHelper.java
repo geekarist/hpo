@@ -24,28 +24,37 @@ class CartDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void insert(Book book) {
+        execInTransaction("INSERT INTO book (isbn, title, price, cover) VALUES (?, ?, ?, ?)",
+                "Error while inserting book", new Object[]{book.isbn, book.title, book.price, book.cover});
+    }
+
+    private void execInTransaction(String sql, String message, Object[] bindArgs) {
         SQLiteDatabase db = getWritableDatabase();
         try {
             db.beginTransaction();
-            db.execSQL("INSERT INTO book (isbn, title, price, cover) VALUES (?, ?, ?, ?)",
-                    new Object[]{book.isbn, book.title, book.price, book.cover});
+            db.execSQL(sql, bindArgs);
             db.setTransactionSuccessful();
         } catch (SQLException e) {
-            Timber.e("Error while inserting book", e);
+            Timber.e(message, e);
         } finally {
             db.endTransaction();
         }
     }
 
     public Book getBook(Cursor cursor) {
+        int id = cursor.getInt(0);
         String isbn = cursor.getString(1);
         String title = cursor.getString(2);
         Integer price = cursor.getInt(3);
         String cover = cursor.getString(4);
-        return new Book(isbn, title, price, cover);
+        return new Book(id, isbn, title, price, cover);
     }
 
     public Cursor createCursor() {
         return getReadableDatabase().rawQuery("SELECT * FROM book", null);
+    }
+
+    public void delete(Book book) {
+        execInTransaction("DELETE FROM book WHERE book._id = ?", "Error while deleting book", new Object[]{book.id});
     }
 }

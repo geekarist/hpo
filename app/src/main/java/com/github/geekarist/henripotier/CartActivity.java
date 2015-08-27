@@ -40,7 +40,6 @@ public class CartActivity extends Activity {
                 return new CursorLoader(CartActivity.this) {
                     @Override
                     public Cursor loadInBackground() {
-                        // TODO Observe db change: http://stackoverflow.com/a/27385022/1665730
                         return PotierApplication.instance().getDbHelper().createCursor();
                     }
                 };
@@ -62,11 +61,11 @@ public class CartActivity extends Activity {
         });
 
         continueShoppingButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            finish();
-        }
-    });
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override
