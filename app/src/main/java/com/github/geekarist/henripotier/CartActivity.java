@@ -5,6 +5,7 @@ import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -52,12 +53,15 @@ public class CartActivity extends Activity {
             public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
                 mAdapter = new CartAdapter(CartActivity.this, PotierApplication.instance().getDbHelper(), data);
                 mListView.setAdapter(mAdapter);
+                mAdapter.registerDataSetObserver(new DataSetObserver() {
+                    @Override
+                    public void onChanged() {
+                        updateTotal();
+                    }
+                });
 
                 Book purchasedBook = (Book) getIntent().getSerializableExtra("purchasedBook");
                 mAdapter.add(purchasedBook);
-
-                mTotalView.setText(getResources().getString(
-                        R.string.cart_total, PotierApplication.instance().getDbHelper().total()));
             }
 
             @Override
@@ -72,6 +76,11 @@ public class CartActivity extends Activity {
                 finish();
             }
         });
+    }
+
+    private void updateTotal() {
+        mTotalView.setText(getResources().getString(
+                R.string.cart_total, PotierApplication.instance().getDbHelper().total()));
     }
 
     @Override

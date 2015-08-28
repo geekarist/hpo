@@ -10,5 +10,5 @@
     <string name="price">%d EUR</string>
     <string name="buy_book_msg">Vous voulez %s</string>
     <string name="remove_from_cart">Enlever du panier</string>
-    <string name="cart_total">Total : %d</string>
+    <string name="cart_total">Total : %d EUR</string>
 </resources>
