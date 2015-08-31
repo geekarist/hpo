@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 
 public class CartActivity extends Activity {
 
+    public static final int LOADER_ID = 0;
     @Bind(R.id.continue_shopping)
     Button continueShoppingButton;
     @Bind(R.id.cart_list)
@@ -32,13 +33,8 @@ public class CartActivity extends Activity {
         setContentView(R.layout.activity_cart_list);
 
         ButterKnife.bind(this);
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        getLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<Cursor>() {
+        getLoaderManager().initLoader(LOADER_ID, null, new LoaderManager.LoaderCallbacks<Cursor>() {
             @Override
             public Loader<Cursor> onCreateLoader(int id, Bundle args) {
                 return new CursorLoader(CartActivity.this) {
@@ -69,6 +65,11 @@ public class CartActivity extends Activity {
                 // TODO
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
 
         continueShoppingButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,6 +87,6 @@ public class CartActivity extends Activity {
     @Override
     protected void onStop() {
         super.onStop();
-        getLoaderManager().destroyLoader(0);
+        getLoaderManager().destroyLoader(LOADER_ID);
     }
 }

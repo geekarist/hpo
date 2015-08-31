@@ -15,6 +15,7 @@ import timber.log.Timber;
 public class PotierApplication extends Application {
 
     private static PotierApplication instance;
+
     private HenriPotier mHenriPotier;
     private CartDatabaseHelper mDbHelper;
 
