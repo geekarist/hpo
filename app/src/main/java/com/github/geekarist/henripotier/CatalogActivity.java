@@ -15,12 +15,12 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import timber.log.Timber;
 
-public class BookListActivity extends Activity {
+public class CatalogActivity extends Activity {
 
     @Bind(R.id.list)
     ListView mListView;
 
-    private BookCatalogAdapter mAdapter;
+    private CatalogAdapter mAdapter;
     private PotierApplication mApplication;
 
     @Override
@@ -32,7 +32,7 @@ public class BookListActivity extends Activity {
         ButterKnife.bind(this);
 
         mApplication = PotierApplication.instance();
-        mAdapter = new BookCatalogAdapter(this);
+        mAdapter = new CatalogAdapter(this);
 
         mListView.setAdapter(mAdapter);
     }

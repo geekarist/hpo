@@ -18,7 +18,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-class BookCatalogAdapter extends BaseAdapter {
+class CatalogAdapter extends BaseAdapter {
     private final List<Book> mCatalog;
     private final Context mContext;
 
@@ -31,7 +31,7 @@ class BookCatalogAdapter extends BaseAdapter {
     @Bind(R.id.add_to_cart)
     Button mAddToCartButton;
 
-    public BookCatalogAdapter(Context context) {
+    public CatalogAdapter(Context context) {
         mCatalog = new ArrayList<>();
         mContext = context;
         Picasso.with(context).setIndicatorsEnabled(BuildConfig.DEBUG);
