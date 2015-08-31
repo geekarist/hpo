@@ -72,7 +72,8 @@ class BookCatalogAdapter extends BaseAdapter {
 
         mTitleView.setText(b.title);
         mPriceView.setText(parent.getResources().getString(R.string.price, b.price));
-        Picasso.with(mContext).load(b.cover).placeholder(R.drawable.book_cover_placeholder).into(mImageView);
+        Picasso.with(mContext).load(b.cover).resize(200, 200).centerInside()
+                .placeholder(R.drawable.book_cover_placeholder).into(mImageView);
 
         mAddToCartButton.setOnClickListener(new View.OnClickListener() {
             @Override

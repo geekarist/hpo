@@ -53,7 +53,8 @@ public class CartAdapter extends CursorAdapter {
         final Book book = mDbHelper.getBook(cursor);
         mTitleView.setText(book.title);
         mPriceView.setText(mContext.getResources().getString(R.string.price, book.price));
-        Picasso.with(mContext).load(book.cover).placeholder(R.drawable.book_cover_placeholder).into(mImageView);
+        Picasso.with(mContext).load(book.cover).resize(200, 200).centerInside()
+                .placeholder(R.drawable.book_cover_placeholder).into(mImageView);
 
         removeItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,7 +63,6 @@ public class CartAdapter extends CursorAdapter {
                 Cursor cursor = mDbHelper.createCursor();
                 swapCursor(cursor);
                 notifyDataSetChanged();
-                // TODO reload cart total
             }
         });
     }
