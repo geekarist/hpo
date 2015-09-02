@@ -12,6 +12,8 @@ android {
         versionName "1.0"
 
         buildConfigField "String", "HENRI_POTIER_URL", '"http://henri-potier.xebia.fr"'
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -40,4 +42,8 @@ dependencies {
     testCompile 'org.assertj:assertj-core:1.+'
     testCompile 'org.mockito:mockito-core:1.+'
     testCompile 'org.robolectric:robolectric:3.0'
+
+    androidTestCompile 'com.android.support.test:runner:0.3'
+    androidTestCompile 'com.android.support.test:rules:0.3'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2'
 }
