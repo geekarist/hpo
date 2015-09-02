@@ -1,9 +1,6 @@
 package com.github.geekarist.henripotier;
 
 import android.app.Activity;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
-import android.content.Loader;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.os.Bundle;
@@ -15,9 +12,10 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class CartActivity extends Activity {
+public class CartActivity extends Activity implements CursorAdaptable {
 
     public static final int LOADER_ID = 0;
+
     @Bind(R.id.continue_shopping)
     Button continueShoppingButton;
     @Bind(R.id.cart_list)
@@ -34,37 +32,22 @@ public class CartActivity extends Activity {
 
         ButterKnife.bind(this);
 
-        getLoaderManager().initLoader(LOADER_ID, null, new LoaderManager.LoaderCallbacks<Cursor>() {
-            @Override
-            public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-                return new CursorLoader(CartActivity.this) {
-                    @Override
-                    public Cursor loadInBackground() {
-                        return PotierApplication.instance().getDbHelper().createCursor();
-                    }
-                };
-            }
+        getLoaderManager().initLoader(LOADER_ID, null, new CartLoaderCallbacks(this, this));
+    }
 
+    @Override
+    public void onCursorLoaded(Cursor data) {
+        mAdapter = new CartAdapter(CartActivity.this, PotierApplication.instance().getDbHelper(), data);
+        mListView.setAdapter(mAdapter);
+        mAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
-            public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-                mAdapter = new CartAdapter(CartActivity.this, PotierApplication.instance().getDbHelper(), data);
-                mListView.setAdapter(mAdapter);
-                mAdapter.registerDataSetObserver(new DataSetObserver() {
-                    @Override
-                    public void onChanged() {
-                        updateTotal();
-                    }
-                });
-
-                Book purchasedBook = (Book) getIntent().getSerializableExtra("purchasedBook");
-                mAdapter.add(purchasedBook);
-            }
-
-            @Override
-            public void onLoaderReset(Loader<Cursor> loader) {
-                // TODO
+            public void onChanged() {
+                updateTotal();
             }
         });
+
+        Book purchasedBook = (Book) getIntent().getSerializableExtra("purchasedBook");
+        mAdapter.add(purchasedBook);
     }
 
     @Override
@@ -89,4 +72,5 @@ public class CartActivity extends Activity {
         super.onStop();
         getLoaderManager().destroyLoader(LOADER_ID);
     }
+
 }
