@@ -50,6 +50,7 @@ public class CatalogActivity extends Activity {
 
             @Override
             public void failure(RetrofitError error) {
+                // UnknownException is not logged, see android.util.Log.getStackTraceString
                 Timber.e(error, "Error while retrieving books");
             }
         });
