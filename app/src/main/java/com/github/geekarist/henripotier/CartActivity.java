@@ -11,13 +11,12 @@ import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class CartActivity extends Activity implements CursorAdaptable {
 
     public static final int LOADER_ID = 0;
 
-    @Bind(R.id.continue_shopping)
-    Button continueShoppingButton;
     @Bind(R.id.cart_list)
     ListView mListView;
     @Bind(R.id.total)
@@ -50,16 +49,9 @@ public class CartActivity extends Activity implements CursorAdaptable {
         mAdapter.add(purchasedBook);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        continueShoppingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+    @OnClick(R.id.continue_shopping)
+    void continueShopping() {
+        finish();
     }
 
     private void updateTotal() {
