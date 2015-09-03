@@ -43,8 +43,7 @@ public class CartAdapter extends CursorAdapter {
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        LayoutInflater inflater = LayoutInflater.from(mContext);
-        return inflater.inflate(R.layout.activity_cart_item, null);
+        return LayoutInflater.from(mContext).inflate(R.layout.activity_cart_item, null);
     }
 
     @Override
