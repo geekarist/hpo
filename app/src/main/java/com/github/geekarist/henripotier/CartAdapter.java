@@ -20,15 +20,8 @@ public class CartAdapter extends CursorAdapter {
     private final Context mContext;
     private final CartDatabaseHelper mDbHelper;
 
-    // TODO snake case
-    @Bind(R.id.cartItemTitleView)
-    TextView mTitleView;
-    @Bind(R.id.cartItemPriceView)
-    TextView mPriceView;
-    @Bind(R.id.cartItemImageView)
-    ImageView mImageView;
-    @Bind(R.id.remove_from_cart)
-    Button removeItemButton;
+    @Bind(R.id.book_view)
+    BookView bookView;
 
     public CartAdapter(Context context, CartDatabaseHelper helper, Cursor cursor) {
         super(context, cursor, false);
@@ -50,24 +43,15 @@ public class CartAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         ButterKnife.bind(this, view);
         final Book book = mDbHelper.getBook(cursor);
-        mTitleView.setText(book.title);
-        mPriceView.setText(mContext.getResources().getString(R.string.price, book.price));
-        Picasso.with(mContext).load(book.cover).resize(200, 200).centerInside()
-                .placeholder(R.drawable.book_cover_placeholder).into(mImageView);
-
-        removeItemButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PotierApplication.instance().getDbHelper().delete(book);
-                Cursor cursor = mDbHelper.createCursor();
-                swapCursor(cursor);
-                notifyDataSetChanged();
-            }
-        });
+        bookView.xxx(book);
     }
 
     public void add(Book purchasedBook) {
         mDbHelper.insert(purchasedBook);
+        notifyChange();
+    }
+
+    public void notifyChange() {
         Cursor cursor = mDbHelper.createCursor();
         swapCursor(cursor);
         notifyDataSetChanged();
