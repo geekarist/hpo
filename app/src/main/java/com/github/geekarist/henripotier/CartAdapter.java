@@ -5,15 +5,11 @@ import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CursorAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class CartAdapter extends CursorAdapter {
 
@@ -39,11 +35,17 @@ public class CartAdapter extends CursorAdapter {
         return LayoutInflater.from(mContext).inflate(R.layout.activity_cart_item, null);
     }
 
+    @OnClick(R.id.remove_from_cart)
+    void removeBook(BookView bookView) {
+        PotierApplication.instance().getDbHelper().delete(bookView.getBook());
+        notifyChange();
+    }
+
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         ButterKnife.bind(this, view);
         final Book book = mDbHelper.getBook(cursor);
-        bookView.xxx(book);
+        bookView.setBook(book);
     }
 
     public void add(Book purchasedBook) {

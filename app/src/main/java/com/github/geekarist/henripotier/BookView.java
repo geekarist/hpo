@@ -1,9 +1,7 @@
 package com.github.geekarist.henripotier;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,9 +12,6 @@ import com.squareup.picasso.Picasso;
 import butterknife.Bind;
 
 public class BookView extends LinearLayout {
-    private final Context mContext;
-    private final Notifiable mNotifiable;
-
     @Bind(R.id.cart_item_title_view)
     TextView mTitleView;
     @Bind(R.id.cart_item_price_view)
@@ -26,31 +21,24 @@ public class BookView extends LinearLayout {
     @Bind(R.id.remove_from_cart)
     Button removeItemButton;
 
-    public BookView(Context context, Notifiable notifiable) {
-        super(context);
-        mContext = context;
-        mNotifiable = notifiable;
-    }
+    private Book mBook;
 
     public BookView(Context context, AttributeSet attributes) {
         super(context, attributes);
     }
 
-    public void xxx(final Book book) {
+    public Book getBook() {
+        return mBook;
+    }
+
+    public void setBook(Book book) {
+        this.mBook = book;
+
         final CartDatabaseHelper mDbHelper = PotierApplication.instance().getDbHelper();
 
         mTitleView.setText(book.title);
-        mPriceView.setText(mContext.getResources().getString(R.string.price, book.price));
-        Picasso.with(mContext).load(book.cover).resize(200, 200).centerInside()
+        mPriceView.setText(getContext().getResources().getString(R.string.price, book.price));
+        Picasso.with(getContext()).load(book.cover).resize(200, 200).centerInside()
                 .placeholder(R.drawable.book_cover_placeholder).into(mImageView);
-
-        removeItemButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PotierApplication.instance().getDbHelper().delete(book);
-                Cursor cursor = mDbHelper.createCursor();
-                mNotifiable.notifyChange();
-            }
-        });
     }
 }
