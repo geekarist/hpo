@@ -6,9 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -22,14 +19,8 @@ class CatalogAdapter extends BaseAdapter {
     private final List<Book> mCatalog;
     private final Context mContext;
 
-    @Bind(R.id.titleView)
-    TextView mTitleView;
-    @Bind(R.id.priceView)
-    TextView mPriceView;
-    @Bind(R.id.imageView)
-    ImageView mImageView;
-    @Bind(R.id.add_to_cart)
-    Button mAddToCartButton;
+    @Bind(R.id.book_view)
+    BookView mBookView;
 
     public CatalogAdapter(Context context) {
         mCatalog = new ArrayList<>();
@@ -69,13 +60,8 @@ class CatalogAdapter extends BaseAdapter {
         ButterKnife.bind(this, v);
 
         final Book b = mCatalog.get(position);
-
-        mTitleView.setText(b.title);
-        mPriceView.setText(parent.getResources().getString(R.string.price, b.price));
-        Picasso.with(mContext).load(b.cover).resize(200, 200).centerInside()
-                .placeholder(R.drawable.book_cover_placeholder).into(mImageView);
-
-        mAddToCartButton.setOnClickListener(new View.OnClickListener() {
+        mBookView.setBook(b);
+        mBookView.setOnSelectButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, CartActivity.class);
