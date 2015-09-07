@@ -11,4 +11,5 @@
     <string name="buy_book_msg">Vous voulez %s</string>
     <string name="remove_from_cart">Enlever du panier</string>
     <string name="cart_total">Total : %d EUR</string>
+    <string name="choose_book">Choisir</string>
 </resources>

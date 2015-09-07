@@ -36,7 +36,7 @@
             android:id="@+id/book_selection_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/add_to_cart" />
+            android:text="@string/choose_book" />
     </LinearLayout>
 
 </merge>

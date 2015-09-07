@@ -3,6 +3,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="add_to_cart">Add to cart</string>
+    <string name="choose_book">Choose</string>
     <string name="error_retrieving_catalog">Error while retrieving catalog</string>
     <string name="continue_shopping">Continue shopping</string>
     <string name="no_data">No data</string>
