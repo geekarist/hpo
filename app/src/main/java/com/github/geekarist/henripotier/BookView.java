@@ -44,7 +44,11 @@ public class BookView extends LinearLayout {
                 .placeholder(R.drawable.book_cover_placeholder).into(mImageView);
     }
 
-    public void setOnSelectButtonListener(OnClickListener onClickListener) {
+    public void setOnChooseButtonListener(OnClickListener onClickListener) {
         mButton.setOnClickListener(onClickListener);
+    }
+
+    public void setChooseButtonLabel(int resId) {
+        mButton.setText(resId);
     }
 }

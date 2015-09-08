@@ -61,7 +61,8 @@ class CatalogAdapter extends BaseAdapter {
 
         final Book b = mCatalog.get(position);
         mBookView.setBook(b);
-        mBookView.setOnSelectButtonListener(new View.OnClickListener() {
+        mBookView.setChooseButtonLabel(R.string.add_to_cart);
+        mBookView.setOnChooseButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, CartActivity.class);

@@ -39,7 +39,8 @@ public class CartAdapter extends CursorAdapter {
         ButterKnife.bind(this, view);
         final Book book = mDbHelper.getBook(cursor);
         mBookView.setBook(book);
-        mBookView.setOnSelectButtonListener(new View.OnClickListener() {
+        mBookView.setChooseButtonLabel(R.string.remove_from_cart);
+        mBookView.setOnChooseButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 PotierApplication.instance().getDbHelper().delete(mBookView.getBook());
