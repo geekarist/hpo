@@ -59,10 +59,4 @@ public class CartActivity extends Activity implements CursorAdaptable {
                 R.string.cart_total, PotierApplication.instance().getDbHelper().total()));
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        getLoaderManager().destroyLoader(LOADER_ID);
-    }
-
 }
