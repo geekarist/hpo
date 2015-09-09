@@ -28,6 +28,11 @@ public class BookView extends LinearLayout {
     public BookView(Context context, AttributeSet attributes) {
         super(context, attributes);
         LayoutInflater.from(context).inflate(R.layout.book, this, true);
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
         ButterKnife.bind(this);
     }
 
