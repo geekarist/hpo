@@ -16,6 +16,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 class CatalogAdapter extends BaseAdapter {
+
     private final List<Book> mCatalog;
     private final Context mContext;
 
@@ -66,7 +67,7 @@ class CatalogAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, CartActivity.class);
-                intent.putExtra("purchasedBook", b);
+                intent.putExtra(PotierApplication.EXTRA_PURCHASED, b);
                 mContext.startActivity(intent);
             }
         });

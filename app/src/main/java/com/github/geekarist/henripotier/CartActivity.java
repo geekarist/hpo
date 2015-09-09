@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -45,7 +43,7 @@ public class CartActivity extends Activity implements CursorAdaptable {
             }
         });
 
-        Book purchasedBook = (Book) getIntent().getSerializableExtra("purchasedBook");
+        Book purchasedBook = (Book) getIntent().getSerializableExtra(PotierApplication.EXTRA_PURCHASED);
         mAdapter.add(purchasedBook);
     }
 

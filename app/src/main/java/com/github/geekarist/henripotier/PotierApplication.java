@@ -14,6 +14,8 @@ import timber.log.Timber;
 
 public class PotierApplication extends Application {
 
+    public static final String EXTRA_PURCHASED = "purchasedBook";
+
     private static PotierApplication instance;
 
     private HenriPotier mHenriPotier;
@@ -54,6 +56,7 @@ public class PotierApplication extends Application {
     }
 
     public interface HenriPotier {
+
         @GET("/books")
         void books(Callback<List<Book>> doOnBooks);
     }
