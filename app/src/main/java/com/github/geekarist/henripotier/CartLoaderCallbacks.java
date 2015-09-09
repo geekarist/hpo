@@ -28,11 +28,11 @@ class CartLoaderCallbacks implements LoaderManager.LoaderCallbacks<Cursor> {
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mAdaptable.onCursorLoaded(data);
+        mAdaptable.adaptCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        // TODO
+        mAdaptable.releaseCursor();
     }
 }

@@ -29,13 +29,15 @@ public class CartActivity extends Activity implements CursorAdaptable {
 
         ButterKnife.bind(this);
 
+        mAdapter = new CartAdapter(CartActivity.this, PotierApplication.instance().getDbHelper(), null);
+        mListView.setAdapter(mAdapter);
+
         getLoaderManager().initLoader(LOADER_ID, null, new CartLoaderCallbacks(this, this));
     }
 
     @Override
-    public void onCursorLoaded(Cursor data) {
-        mAdapter = new CartAdapter(CartActivity.this, PotierApplication.instance().getDbHelper(), data);
-        mListView.setAdapter(mAdapter);
+    public void adaptCursor(Cursor data) {
+        mAdapter.swapCursor(data);
         mAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
             public void onChanged() {
@@ -45,6 +47,11 @@ public class CartActivity extends Activity implements CursorAdaptable {
 
         Book purchasedBook = (Book) getIntent().getSerializableExtra(PotierApplication.EXTRA_PURCHASED);
         mAdapter.add(purchasedBook);
+    }
+
+    @Override
+    public void releaseCursor() {
+        mAdapter.swapCursor(null);
     }
 
     @OnClick(R.id.continue_shopping)
