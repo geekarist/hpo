@@ -6,29 +6,25 @@
     android:layout_alignParentRight="true"
     android:layout_alignParentTop="true"
     android:orientation="vertical"
-    tools:context=".BookListActivity">
+    tools:context=".CartActivity">
 
     <TextView
         android:id="@+id/total"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/default_total" />
-
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@android:id/empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/no_data" />
+        android:gravity="center"
+        android:text="@string/default_total"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
         android:id="@+id/continue_shopping"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/continue_shopping" />
+
+    <ListView
+        android:id="@+id/cart_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

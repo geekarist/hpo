@@ -14,8 +14,12 @@ import timber.log.Timber;
 
 public class PotierApplication extends Application {
 
+    public static final String EXTRA_PURCHASED = "purchasedBook";
+
     private static PotierApplication instance;
+
     private HenriPotier mHenriPotier;
+    private CartDatabaseHelper mDbHelper;
 
     public PotierApplication() {
         super();
@@ -40,13 +44,19 @@ public class PotierApplication extends Application {
                 .build();
 
         this.mHenriPotier = restAdapter.create(HenriPotier.class);
+        this.mDbHelper = new CartDatabaseHelper(this, null, null, 1);
     }
 
     public HenriPotier getHenriPotier() {
         return mHenriPotier;
     }
 
+    public CartDatabaseHelper getDbHelper() {
+        return mDbHelper;
+    }
+
     public interface HenriPotier {
+
         @GET("/books")
         void books(Callback<List<Book>> doOnBooks);
     }

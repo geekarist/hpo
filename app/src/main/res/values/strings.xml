@@ -3,10 +3,13 @@
 
     <string name="action_settings">Settings</string>
     <string name="add_to_cart">Add to cart</string>
+    <string name="choose_book">Choose</string>
     <string name="error_retrieving_catalog">Error while retrieving catalog</string>
-    <string name="continue_shopping">Continue</string>
+    <string name="continue_shopping">Continue shopping</string>
     <string name="no_data">No data</string>
     <string name="default_total">Total: 0 EUR</string>
     <string name="price">%d EUR</string>
     <string name="buy_book_msg">You want %s</string>
+    <string name="remove_from_cart">Remove from cart</string>
+    <string name="cart_total">Total: %d EUR</string>
 </resources>
