@@ -45,7 +45,7 @@ public class CartActivity extends Activity implements CursorAdaptable {
             }
         });
 
-        Book purchasedBook = (Book) getIntent().getSerializableExtra(PotierApplication.EXTRA_PURCHASED);
+        Book purchasedBook = getIntent().getParcelableExtra(PotierApplication.EXTRA_PURCHASED);
         mAdapter.add(purchasedBook);
     }
 
