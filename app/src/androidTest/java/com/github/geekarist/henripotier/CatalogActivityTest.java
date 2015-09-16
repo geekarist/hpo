@@ -11,14 +11,46 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 
+import com.squareup.okhttp.HttpUrl;
+import com.squareup.okhttp.mockwebserver.MockResponse;
+import com.squareup.okhttp.mockwebserver.MockWebServer;
+
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 
+import java.io.IOException;
+
+// TODO disable analytics in test runner: http://goo.gl/LVedbO
 public class CatalogActivityTest extends ActivityInstrumentationTestCase2<CatalogActivity> {
     private CatalogActivity mActivity;
 
-    public CatalogActivityTest() {
+    private HttpUrl fakeHenriPotierUrl;
+    private final MockWebServer fakeWebServer;
+
+    public CatalogActivityTest() throws IOException {
         super(CatalogActivity.class);
+
+        fakeWebServer = new MockWebServer();
+        fakeWebServer.start();
+        fakeHenriPotierUrl = fakeWebServer.url("/");
+        PotierApplication.instance().changeHenriPotierUrl(fakeHenriPotierUrl);
+        String body = replaceQuotes("[\n" +
+                "  {\n" +
+                "    'isbn': 'c8fabf68-8374-48fe-a7ea-a00ccd07afff',\n" +
+                "    'title': 'Henri Potier à la truc des sorciers',\n" +
+                "    'price': 35\n" +
+                "  },\n" +
+                "  {\n" +
+                "    'isbn': 'a460afed-e5e7-4e39-a39d-c885c05db861',\n" +
+                "    'title': 'Henri Potier et la Chambre des secrets',\n" +
+                "    'price': 30\n" +
+                "  }" +
+                "]");
+        fakeWebServer.enqueue(new MockResponse().setBody(body));
+    }
+
+    private String replaceQuotes(String s) {
+        return s.replaceAll("'", "\"");
     }
 
     @Override
@@ -28,9 +60,13 @@ public class CatalogActivityTest extends ActivityInstrumentationTestCase2<Catalo
         mActivity = getActivity();
     }
 
-    public void testShouldDisplayListOfBooks() throws InterruptedException {
+    public void testShouldDisplayListOfBooks() throws InterruptedException, IOException {
+        // Wait for catalog
         Espresso.onView(ViewMatchers.isRoot()).perform(new WaitFor(3000));
 
+        // TODO check catalog list size: http://stackoverflow.com/a/30361345/1665730
+
+        // Choose first book
         Espresso.onData(Matchers.instanceOf(Book.class))
                 .inAdapterView(Matchers.allOf(ViewMatchers.withId(R.id.list), ViewMatchers.isDisplayed()))
                 .atPosition(0)
@@ -38,16 +74,56 @@ public class CatalogActivityTest extends ActivityInstrumentationTestCase2<Catalo
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
                 .perform(ViewActions.click());
 
-
+        // Cart should be displayed
         Espresso.onView(ViewMatchers.withId(R.id.cart_list))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
 
+        Espresso.pressBack();
+
+        // Choose second book
+        Espresso.onData(Matchers.instanceOf(Book.class))
+                .inAdapterView(Matchers.allOf(ViewMatchers.withId(R.id.list), ViewMatchers.isDisplayed()))
+                .atPosition(1)
+                .onChildView(ViewMatchers.withId(R.id.book_selection_button))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+                .perform(ViewActions.click());
+
+        // Cart should be displayed
+        Espresso.onView(ViewMatchers.withId(R.id.cart_list))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        // First book should be in Cart
+        Espresso.onData(Matchers.instanceOf(Cursor.class))
+                .inAdapterView(Matchers.allOf(ViewMatchers.withId(R.id.cart_list), ViewMatchers.isDisplayed()))
+                .atPosition(0)
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        // Second book should be in Cart
+        Espresso.onData(Matchers.instanceOf(Cursor.class))
+                .inAdapterView(Matchers.allOf(ViewMatchers.withId(R.id.cart_list), ViewMatchers.isDisplayed()))
+                .atPosition(1)
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        // TODO check total amount
+        // TODO check name of books
+
+        // Remove first book from cart
         Espresso.onData(Matchers.instanceOf(Cursor.class))
                 .inAdapterView(Matchers.allOf(ViewMatchers.withId(R.id.cart_list), ViewMatchers.isDisplayed()))
                 .atPosition(0)
                 .onChildView(ViewMatchers.withId(R.id.book_selection_button))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
                 .perform(ViewActions.click());
+
+        // Remove second book from cart
+        Espresso.onData(Matchers.instanceOf(Cursor.class))
+                .inAdapterView(Matchers.allOf(ViewMatchers.withId(R.id.cart_list), ViewMatchers.isDisplayed()))
+                .atPosition(0)
+                .onChildView(ViewMatchers.withId(R.id.book_selection_button))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+                .perform(ViewActions.click());
+
+        // TODO Cart should be empty
     }
 
     private static class WaitFor implements ViewAction {

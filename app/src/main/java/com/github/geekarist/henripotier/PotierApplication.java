@@ -2,6 +2,7 @@ package com.github.geekarist.henripotier;
 
 import android.app.Application;
 
+import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.util.List;
@@ -38,13 +39,17 @@ public class PotierApplication extends Application {
             Timber.plant(new Timber.DebugTree());
         }
 
+        this.mHenriPotier = createRestAdapter(BuildConfig.HENRI_POTIER_URL);
+        this.mDbHelper = new CartDatabaseHelper(this, null, null, 1);
+    }
+
+    private HenriPotier createRestAdapter(String url) {
         RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(BuildConfig.HENRI_POTIER_URL)
+                .setEndpoint(url)
                 .setClient(new OkClient(new OkHttpClient()))
                 .build();
 
-        this.mHenriPotier = restAdapter.create(HenriPotier.class);
-        this.mDbHelper = new CartDatabaseHelper(this, null, null, 1);
+        return restAdapter.create(HenriPotier.class);
     }
 
     public HenriPotier getHenriPotier() {
@@ -53,6 +58,10 @@ public class PotierApplication extends Application {
 
     public CartDatabaseHelper getDbHelper() {
         return mDbHelper;
+    }
+
+    public void changeHenriPotierUrl(HttpUrl url) {
+        mHenriPotier = createRestAdapter(url.toString());
     }
 
     public interface HenriPotier {
