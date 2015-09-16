@@ -1,5 +1,6 @@
 package com.github.geekarist.henripotier;
 
+import android.database.Cursor;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.action.ViewActions;
@@ -30,7 +31,15 @@ public class CatalogActivityTest extends ActivityInstrumentationTestCase2<Catalo
                 .onChildView(ViewMatchers.withId(R.id.book_selection_button))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
                 .perform(ViewActions.click());
+
         Espresso.onView(ViewMatchers.withId(R.id.cart_list))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        Espresso.onData(Matchers.instanceOf(Cursor.class))
+                .inAdapterView(Matchers.allOf(ViewMatchers.withId(R.id.cart_list), ViewMatchers.isDisplayed()))
+                .atPosition(0)
+                .onChildView(ViewMatchers.withId(R.id.book_selection_button))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+                .perform(ViewActions.click());
     }
 }

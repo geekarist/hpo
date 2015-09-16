@@ -55,7 +55,7 @@ class CatalogAdapter extends BaseAdapter {
         View v = convertView;
         if (v == null) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
-            v = inflater.inflate(R.layout.activity_book_item, null);
+            v = inflater.inflate(R.layout.activity_catalog_item, null);
         }
 
         ButterKnife.bind(this, v);

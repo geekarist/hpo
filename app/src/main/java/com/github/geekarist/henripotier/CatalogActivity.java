@@ -27,7 +27,7 @@ public class CatalogActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_book_list);
+        setContentView(R.layout.activity_catalog_list);
 
         ButterKnife.bind(this);
 
