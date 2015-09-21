@@ -78,6 +78,10 @@ public class CatalogActivityTest extends ActivityInstrumentationTestCase2<Catalo
         Espresso.onView(ViewMatchers.withId(R.id.cart_list))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
 
+        // Check total
+        Espresso.onView(ViewMatchers.withId(R.id.total))
+                .check(ViewAssertions.matches(ViewMatchers.withText("Total: 35 EUR")));
+
         Espresso.pressBack();
 
         // Choose second book
@@ -104,8 +108,12 @@ public class CatalogActivityTest extends ActivityInstrumentationTestCase2<Catalo
                 .atPosition(1)
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
 
-        // TODO check total amount
+        // Check total amount
+        Espresso.onView(ViewMatchers.withId(R.id.total))
+                .check(ViewAssertions.matches(ViewMatchers.withText("Total: 65 EUR")));
+
         // TODO check name of books
+        // TODO check discount
 
         // Remove first book from cart
         Espresso.onData(Matchers.instanceOf(Cursor.class))
@@ -122,6 +130,10 @@ public class CatalogActivityTest extends ActivityInstrumentationTestCase2<Catalo
                 .onChildView(ViewMatchers.withId(R.id.book_selection_button))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
                 .perform(ViewActions.click());
+
+        // Amount should be 0
+        Espresso.onView(ViewMatchers.withId(R.id.total))
+                .check(ViewAssertions.matches(ViewMatchers.withText("Total: 0 EUR")));
 
         // TODO Cart should be empty
     }
