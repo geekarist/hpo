@@ -7,9 +7,15 @@ import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import timber.log.Timber;
 
 public class CartActivity extends Activity implements CursorAdaptable {
 
@@ -60,8 +66,43 @@ public class CartActivity extends Activity implements CursorAdaptable {
     }
 
     private void updateTotal() {
-        mTotalView.setText(getResources().getString(
-                R.string.cart_total, PotierApplication.instance().getDbHelper().total()));
+        final int total = PotierApplication.instance().getDbHelper().total();
+        final List<Book> books = getBooks();
+        String isbnValues = getIsbns(books);
+
+        PotierApplication.instance().getHenriPotier().commercialOffers(isbnValues, new Callback<List<CommercialOffer>>() {
+            @Override
+            public void success(List<CommercialOffer> commercialOffers, Response response) {
+                int bestOffer = 0;
+                for (CommercialOffer offer : commercialOffers) {
+                    int discount = offer.apply(books);
+                    if (discount > bestOffer) {
+                        bestOffer = discount;
+                    }
+                }
+                mTotalView.setText(getResources().getString(R.string.cart_total, total - bestOffer));
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Timber.e(error, "Error while retrieving commercial offers");
+            }
+        });
+    }
+
+    private String getIsbns(List<Book> books) {
+        StringBuilder isbnValues = new StringBuilder();
+        for (Book b : books) {
+            if (isbnValues.length() != 0) {
+                isbnValues.append(",");
+            }
+            isbnValues.append(b.isbn);
+        }
+        return isbnValues.toString();
+    }
+
+    private List<Book> getBooks() {
+        return PotierApplication.instance().getDbHelper().books();
     }
 
 }

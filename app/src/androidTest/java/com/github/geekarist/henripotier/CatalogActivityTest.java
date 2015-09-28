@@ -22,10 +22,9 @@ import java.io.IOException;
 
 // TODO disable analytics in test runner: http://goo.gl/LVedbO
 public class CatalogActivityTest extends ActivityInstrumentationTestCase2<CatalogActivity> {
-    private CatalogActivity mActivity;
-
-    private HttpUrl fakeHenriPotierUrl;
     private final MockWebServer fakeWebServer;
+    private CatalogActivity mActivity;
+    private HttpUrl fakeHenriPotierUrl;
 
     public CatalogActivityTest() throws IOException {
         super(CatalogActivity.class);
@@ -80,7 +79,7 @@ public class CatalogActivityTest extends ActivityInstrumentationTestCase2<Catalo
 
         // Check total
         Espresso.onView(ViewMatchers.withId(R.id.total))
-                .check(ViewAssertions.matches(ViewMatchers.withText("Total: 35 EUR")));
+                .check(ViewAssertions.matches(ViewMatchers.withText("Total: 30 EUR")));
 
         Espresso.pressBack();
 
@@ -110,7 +109,7 @@ public class CatalogActivityTest extends ActivityInstrumentationTestCase2<Catalo
 
         // Check total amount
         Espresso.onView(ViewMatchers.withId(R.id.total))
-                .check(ViewAssertions.matches(ViewMatchers.withText("Total: 65 EUR")));
+                .check(ViewAssertions.matches(ViewMatchers.withText("Total: 50 EUR")));
 
         // TODO check name of books
         // TODO check discount

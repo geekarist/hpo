@@ -68,6 +68,9 @@ public class PotierApplication extends Application {
 
         @GET("/books")
         void books(Callback<List<Book>> doOnBooks);
+
+        @GET("/books/:isbnValues/commercialOffers")
+        void commercialOffers(String isbnValues, Callback<List<CommercialOffer>> callback);
     }
 
 }

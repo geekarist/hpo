@@ -6,6 +6,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import timber.log.Timber;
 
 class CartDatabaseHelper extends SQLiteOpenHelper {
@@ -65,5 +68,14 @@ class CartDatabaseHelper extends SQLiteOpenHelper {
             return 0;
         }
         return cursor.getInt(0);
+    }
+
+    public List<Book> books() {
+        List<Book> result = new ArrayList<>();
+        Cursor cursor = createCursor();
+        do {
+            result.add(getBook(cursor));
+        } while (cursor.moveToNext());
+        return result;
     }
 }
