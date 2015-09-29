@@ -11,6 +11,7 @@ import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import retrofit.http.GET;
+import retrofit.http.Path;
 import timber.log.Timber;
 
 public class PotierApplication extends Application {
@@ -69,8 +70,8 @@ public class PotierApplication extends Application {
         @GET("/books")
         void books(Callback<List<Book>> doOnBooks);
 
-        @GET("/books/:isbnValues/commercialOffers")
-        void commercialOffers(String isbnValues, Callback<List<CommercialOffer>> callback);
+        @GET("/books/{isbnValues}/commercialOffers")
+        void commercialOffers(@Path("isbnValues") String isbnValues, Callback<CommercialOffers> callback);
     }
 
 }

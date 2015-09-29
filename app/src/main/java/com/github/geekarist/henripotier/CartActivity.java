@@ -70,11 +70,11 @@ public class CartActivity extends Activity implements CursorAdaptable {
         final List<Book> books = getBooks();
         String isbnValues = getIsbns(books);
 
-        PotierApplication.instance().getHenriPotier().commercialOffers(isbnValues, new Callback<List<CommercialOffer>>() {
+        PotierApplication.instance().getHenriPotier().commercialOffers(isbnValues, new Callback<CommercialOffers>() {
             @Override
-            public void success(List<CommercialOffer> commercialOffers, Response response) {
+            public void success(CommercialOffers commercialOffers, Response response) {
                 int bestOffer = 0;
-                for (CommercialOffer offer : commercialOffers) {
+                for (CommercialOffers.Offer offer : commercialOffers.offers) {
                     int discount = offer.apply(books);
                     if (discount > bestOffer) {
                         bestOffer = discount;
