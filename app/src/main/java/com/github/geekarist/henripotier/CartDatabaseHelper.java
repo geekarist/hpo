@@ -73,6 +73,7 @@ class CartDatabaseHelper extends SQLiteOpenHelper {
     public List<Book> books() {
         List<Book> result = new ArrayList<>();
         Cursor cursor = createCursor();
+        cursor.moveToFirst();
         do {
             result.add(getBook(cursor));
         } while (cursor.moveToNext());
