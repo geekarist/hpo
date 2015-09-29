@@ -33,7 +33,7 @@ public class CatalogActivityTest extends ActivityInstrumentationTestCase2<Catalo
         fakeWebServer.start();
         fakeHenriPotierUrl = fakeWebServer.url("/");
         PotierApplication.instance().changeHenriPotierUrl(fakeHenriPotierUrl);
-        String body = replaceQuotes("[\n" +
+        fakeWebServer.enqueue(new MockResponse().setBody(replaceQuotes("[\n" +
                 "  {\n" +
                 "    'isbn': 'c8fabf68-8374-48fe-a7ea-a00ccd07afff',\n" +
                 "    'title': 'Henri Potier à la truc des sorciers',\n" +
@@ -44,8 +44,44 @@ public class CatalogActivityTest extends ActivityInstrumentationTestCase2<Catalo
                 "    'title': 'Henri Potier et la Chambre des secrets',\n" +
                 "    'price': 30\n" +
                 "  }" +
-                "]");
-        fakeWebServer.enqueue(new MockResponse().setBody(body));
+                "]")));
+        fakeWebServer.enqueue(new MockResponse().setBody(replaceQuotes("{\n" +
+                "  'offers': [\n" +
+                "    {\n" +
+                "      'type': 'percentage',\n" +
+                "      'value': 4\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}")));
+        fakeWebServer.enqueue(new MockResponse().setBody(replaceQuotes("[\n" +
+                "  {\n" +
+                "    'isbn': 'c8fabf68-8374-48fe-a7ea-a00ccd07afff',\n" +
+                "    'title': 'Henri Potier à la truc des sorciers',\n" +
+                "    'price': 35\n" +
+                "  },\n" +
+                "  {\n" +
+                "    'isbn': 'a460afed-e5e7-4e39-a39d-c885c05db861',\n" +
+                "    'title': 'Henri Potier et la Chambre des secrets',\n" +
+                "    'price': 30\n" +
+                "  }" +
+                "]")));
+        fakeWebServer.enqueue(new MockResponse().setBody(replaceQuotes("{\n" +
+                "  'offers': [\n" +
+                "    {\n" +
+                "      'type': 'percentage',\n" +
+                "      'value': 4\n" +
+                "    },\n" +
+                "    {\n" +
+                "      'type': 'minus',\n" +
+                "      'value': 15\n" +
+                "    },\n" +
+                "    {\n" +
+                "      'type': 'slice',\n" +
+                "      'sliceValue': 100,\n" +
+                "      'value': 12\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}")));
     }
 
     private String replaceQuotes(String s) {
@@ -79,7 +115,7 @@ public class CatalogActivityTest extends ActivityInstrumentationTestCase2<Catalo
 
         // Check total
         Espresso.onView(ViewMatchers.withId(R.id.total))
-                .check(ViewAssertions.matches(ViewMatchers.withText("Total: 30 EUR")));
+                .check(ViewAssertions.matches(ViewMatchers.withText("Total: 31 EUR")));
 
         Espresso.pressBack();
 
