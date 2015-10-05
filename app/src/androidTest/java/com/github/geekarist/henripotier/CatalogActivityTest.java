@@ -12,8 +12,10 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 
 import com.squareup.okhttp.HttpUrl;
+import com.squareup.okhttp.mockwebserver.Dispatcher;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
+import com.squareup.okhttp.mockwebserver.RecordedRequest;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -33,55 +35,53 @@ public class CatalogActivityTest extends ActivityInstrumentationTestCase2<Catalo
         fakeWebServer.start();
         fakeHenriPotierUrl = fakeWebServer.url("/");
         PotierApplication.instance().changeHenriPotierUrl(fakeHenriPotierUrl);
-        fakeWebServer.enqueue(new MockResponse().setBody(replaceQuotes("[\n" +
-                "  {\n" +
-                "    'isbn': 'c8fabf68-8374-48fe-a7ea-a00ccd07afff',\n" +
-                "    'title': 'Henri Potier à la truc des sorciers',\n" +
-                "    'price': 35\n" +
-                "  },\n" +
-                "  {\n" +
-                "    'isbn': 'a460afed-e5e7-4e39-a39d-c885c05db861',\n" +
-                "    'title': 'Henri Potier et la Chambre des secrets',\n" +
-                "    'price': 30\n" +
-                "  }" +
-                "]")));
-        fakeWebServer.enqueue(new MockResponse().setBody(replaceQuotes("{\n" +
-                "  'offers': [\n" +
-                "    {\n" +
-                "      'type': 'percentage',\n" +
-                "      'value': 4\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}")));
-        fakeWebServer.enqueue(new MockResponse().setBody(replaceQuotes("[\n" +
-                "  {\n" +
-                "    'isbn': 'c8fabf68-8374-48fe-a7ea-a00ccd07afff',\n" +
-                "    'title': 'Henri Potier à la truc des sorciers',\n" +
-                "    'price': 35\n" +
-                "  },\n" +
-                "  {\n" +
-                "    'isbn': 'a460afed-e5e7-4e39-a39d-c885c05db861',\n" +
-                "    'title': 'Henri Potier et la Chambre des secrets',\n" +
-                "    'price': 30\n" +
-                "  }" +
-                "]")));
-        fakeWebServer.enqueue(new MockResponse().setBody(replaceQuotes("{\n" +
-                "  'offers': [\n" +
-                "    {\n" +
-                "      'type': 'percentage',\n" +
-                "      'value': 4\n" +
-                "    },\n" +
-                "    {\n" +
-                "      'type': 'minus',\n" +
-                "      'value': 15\n" +
-                "    },\n" +
-                "    {\n" +
-                "      'type': 'slice',\n" +
-                "      'sliceValue': 100,\n" +
-                "      'value': 12\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}")));
+        fakeWebServer.setDispatcher(new Dispatcher() {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
+                if (request.getPath().equals("/books")) {
+                    return new MockResponse().setBody(replaceQuotes("[\n" +
+                            "  {\n" +
+                            "    'isbn': 'c8fabf68-8374-48fe-a7ea-a00ccd07afff',\n" +
+                            "    'title': 'Henri Potier à la truc des sorciers',\n" +
+                            "    'price': 35\n" +
+                            "  },\n" +
+                            "  {\n" +
+                            "    'isbn': 'a460afed-e5e7-4e39-a39d-c885c05db861',\n" +
+                            "    'title': 'Henri Potier et la Chambre des secrets',\n" +
+                            "    'price': 30\n" +
+                            "  }" +
+                            "]"));
+                } else if (request.getPath().equals("/books/xx/commercialOffers")) {
+                    return (new MockResponse().setBody(replaceQuotes("{\n" +
+                            "  'offers': [\n" +
+                            "    {\n" +
+                            "      'type': 'percentage',\n" +
+                            "      'value': 4\n" +
+                            "    }\n" +
+                            "  ]\n" +
+                            "}")));
+                } else if (request.getPath().equals("/books/yy/commercialOffers")) {
+                    return (new MockResponse().setBody(replaceQuotes("{\n" +
+                            "  'offers': [\n" +
+                            "    {\n" +
+                            "      'type': 'percentage',\n" +
+                            "      'value': 4\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      'type': 'minus',\n" +
+                            "      'value': 15\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      'type': 'slice',\n" +
+                            "      'sliceValue': 100,\n" +
+                            "      'value': 12\n" +
+                            "    }\n" +
+                            "  ]\n" +
+                            "}")));
+                }
+                return new MockResponse().setResponseCode(404);
+            }
+        });
     }
 
     private String replaceQuotes(String s) {
