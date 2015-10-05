@@ -1,6 +1,7 @@
 package com.github.geekarist.henripotier;
 
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.UiController;
@@ -21,14 +22,17 @@ import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 
 // TODO disable analytics in test runner: http://goo.gl/LVedbO
-public class CatalogActivityTest extends ActivityInstrumentationTestCase2<CatalogActivity> {
+public class HenriPotierApplicationTest extends ActivityInstrumentationTestCase2<CatalogActivity> {
     private final MockWebServer fakeWebServer;
     private CatalogActivity mActivity;
     private HttpUrl fakeHenriPotierUrl;
 
-    public CatalogActivityTest() throws IOException {
+    public HenriPotierApplicationTest() throws IOException {
         super(CatalogActivity.class);
 
         fakeWebServer = new MockWebServer();
@@ -51,7 +55,8 @@ public class CatalogActivityTest extends ActivityInstrumentationTestCase2<Catalo
                             "    'price': 30\n" +
                             "  }" +
                             "]"));
-                } else if (request.getPath().equals("/books/xx/commercialOffers")) {
+                } else if (request.getPath().equals("/books/c8fabf68-8374-48fe-a7ea-a00ccd07afff/commercialOffers")) {
+                    // Offer for first book
                     return (new MockResponse().setBody(replaceQuotes("{\n" +
                             "  'offers': [\n" +
                             "    {\n" +
@@ -60,7 +65,10 @@ public class CatalogActivityTest extends ActivityInstrumentationTestCase2<Catalo
                             "    }\n" +
                             "  ]\n" +
                             "}")));
-                } else if (request.getPath().equals("/books/yy/commercialOffers")) {
+                } else if (request.getPath().equals("/books/"
+                        + urlEncode("c8fabf68-8374-48fe-a7ea-a00ccd07afff,a460afed-e5e7-4e39-a39d-c885c05db861")
+                        + "/commercialOffers")) {
+                    // Offers for both books
                     return (new MockResponse().setBody(replaceQuotes("{\n" +
                             "  'offers': [\n" +
                             "    {\n" +
@@ -84,6 +92,15 @@ public class CatalogActivityTest extends ActivityInstrumentationTestCase2<Catalo
         });
     }
 
+    @NonNull
+    private String urlEncode(String url) {
+        try {
+            return URLEncoder.encode(url, Charset.defaultCharset().name());
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private String replaceQuotes(String s) {
         return s.replaceAll("'", "\"");
     }
@@ -95,7 +112,7 @@ public class CatalogActivityTest extends ActivityInstrumentationTestCase2<Catalo
         mActivity = getActivity();
     }
 
-    public void testShouldDisplayListOfBooks() throws InterruptedException, IOException {
+    public void testShouldAllowBuyingBooks() throws InterruptedException, IOException {
         // Wait for catalog
         Espresso.onView(ViewMatchers.isRoot()).perform(new WaitFor(3000));
 
