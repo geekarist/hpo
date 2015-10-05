@@ -68,26 +68,31 @@ public class CartActivity extends Activity implements CursorAdaptable {
     private void updateTotal() {
         final int total = PotierApplication.instance().getDbHelper().total();
         final List<Book> books = getBooks();
-        String isbnValues = getIsbns(books);
 
-        PotierApplication.instance().getHenriPotier().commercialOffers(isbnValues, new Callback<CommercialOffers>() {
-            @Override
-            public void success(CommercialOffers commercialOffers, Response response) {
-                int bestOffer = 0;
-                for (CommercialOffers.Offer offer : commercialOffers.offers) {
-                    int discount = offer.apply(books);
-                    if (discount > bestOffer) {
-                        bestOffer = discount;
+        if (!books.isEmpty()) {
+            String isbnValues = getIsbns(books);
+
+            PotierApplication.instance().getHenriPotier().commercialOffers(isbnValues, new Callback<CommercialOffers>() {
+                @Override
+                public void success(CommercialOffers commercialOffers, Response response) {
+                    int bestOffer = 0;
+                    for (CommercialOffers.Offer offer : commercialOffers.offers) {
+                        int discount = offer.apply(books);
+                        if (discount > bestOffer) {
+                            bestOffer = discount;
+                        }
                     }
+                    mTotalView.setText(getResources().getString(R.string.cart_total, total - bestOffer));
                 }
-                mTotalView.setText(getResources().getString(R.string.cart_total, total - bestOffer));
-            }
 
-            @Override
-            public void failure(RetrofitError error) {
-                Timber.e(error, "Error while retrieving commercial offers");
-            }
-        });
+                @Override
+                public void failure(RetrofitError error) {
+                    Timber.e(error, "Error while retrieving commercial offers");
+                }
+            });
+        } else {
+            mTotalView.setText(getResources().getString(R.string.cart_total, 0));
+        }
     }
 
     private String getIsbns(List<Book> books) {
