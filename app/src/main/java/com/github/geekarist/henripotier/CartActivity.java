@@ -12,10 +12,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
-import timber.log.Timber;
 
 public class CartActivity extends Activity implements CursorAdaptable {
 
@@ -66,48 +62,15 @@ public class CartActivity extends Activity implements CursorAdaptable {
     }
 
     private void updateTotal() {
-        final int total = PotierApplication.instance().getDbHelper().total();
-        final List<Book> books = getBooks();
-
-        if (!books.isEmpty()) {
-            String isbnValues = getIsbns(books);
-
-            PotierApplication.instance().getHenriPotier().commercialOffers(isbnValues, new Callback<CommercialOffers>() {
-                @Override
-                public void success(CommercialOffers commercialOffers, Response response) {
-                    int bestOffer = 0;
-                    for (CommercialOffers.Offer offer : commercialOffers.offers) {
-                        int discount = offer.apply(books);
-                        if (discount > bestOffer) {
-                            bestOffer = discount;
-                        }
-                    }
-                    mTotalView.setText(getResources().getString(R.string.cart_total, total - bestOffer));
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    Timber.e(error, "Error while retrieving commercial offers");
-                }
-            });
-        } else {
-            mTotalView.setText(getResources().getString(R.string.cart_total, 0));
-        }
-    }
-
-    private String getIsbns(List<Book> books) {
-        StringBuilder isbnValues = new StringBuilder();
-        for (Book b : books) {
-            if (isbnValues.length() != 0) {
-                isbnValues.append(",");
+        BestCommercialOffer bestCommercialOffer = new BestCommercialOffer(
+                PotierApplication.instance().getDbHelper(),
+                PotierApplication.instance().getHenriPotier());
+        bestCommercialOffer.apply(new BestCommercialOffer.Callback<Integer>() {
+            @Override
+            public void success(Integer amount) {
+                mTotalView.setText(getResources().getString(R.string.cart_total, amount));
             }
-            isbnValues.append(b.isbn);
-        }
-        return isbnValues.toString();
-    }
-
-    private List<Book> getBooks() {
-        return PotierApplication.instance().getDbHelper().books();
+        });
     }
 
 }
