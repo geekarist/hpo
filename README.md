@@ -15,7 +15,7 @@ La liste des livres Henri Potier est accessible à l’adresse http://henri-poti
 
 Et les offres commerciales associées sont disponibles (depuis n’importe quel domaine) en GET à l’adresse :
 
-http://henri-potier.xebia.fr/books/{ISBN1,ISBN2, ...}/commercialOffers 
+http://henri-potier.xebia.fr/books/{ISBN1,ISBN2,...}/commercialOffers 
 
 Le paramètre est la liste des ISBN distincts des livres du panier.
 
