@@ -25,13 +25,13 @@ http://henri-potier.xebia.fr/books/c8fabf68-8374-48fe-a7ea-a00ccd07afff,a460afed
 
 Et le service vous renverra alors les offres applicables à ce panier sous le format :
 
-  {
-      "offers": [
-          {"type": "percentage", "value": 5},
-          {"type": "minus", "value": 15},
-          {"type": "slice", "sliceValue": 100, "value": 12}
-      ]
-  }
+    {
+        "offers": [
+            {"type": "percentage", "value": 5},
+            {"type": "minus", "value": 15},
+            {"type": "slice", "sliceValue": 100, "value": 12}
+        ]
+    }
 
 Lien pastebin.com : http://pastebin.com/RDpeqQyX
 
