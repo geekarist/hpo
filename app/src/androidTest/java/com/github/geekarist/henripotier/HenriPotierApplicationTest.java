@@ -132,7 +132,7 @@ public class HenriPotierApplicationTest extends ActivityInstrumentationTestCase2
 
         // Check total
         Espresso.onView(ViewMatchers.withId(R.id.total))
-                .check(ViewAssertions.matches(ViewMatchers.withText("Total: 31 EUR")));
+                .check(ViewAssertions.matches(ViewMatchers.withText("Total: 34 EUR")));
 
         Espresso.pressBack();
 
