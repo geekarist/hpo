@@ -27,13 +27,21 @@ public class Offer {
         if (type == Type.minus) {
             return value;
         } else if (type == Type.percentage) {
-            int sum = 0;
-            for (Book b : books) {
-                sum += b.price;
-            }
+            int sum = totalPrice(books);
             return sum * value / 100;
+        } else if (type == Type.slice) {
+            int sum = totalPrice(books);
+            return (sum / sliceValue) * value;
         }
         return 0;
+    }
+
+    private int totalPrice(List<Book> books) {
+        int sum = 0;
+        for (Book b : books) {
+            sum += b.price;
+        }
+        return sum;
     }
 
     public enum Type {minus, percentage, slice}
