@@ -25,7 +25,7 @@ class BestCommercialOffer {
                 @Override
                 public void success(CommercialOffers commercialOffers, Response response) {
                     int bestOffer = 0;
-                    for (CommercialOffers.Offer offer : commercialOffers.offers) {
+                    for (Offer offer : commercialOffers.offers) {
                         int discount = offer.apply(books);
                         if (discount > bestOffer) {
                             bestOffer = discount;
@@ -42,10 +42,6 @@ class BestCommercialOffer {
         }
     }
 
-    public interface Callback<T> {
-        void success(T result);
-    }
-
     private String isbnValues(List<Book> books) {
         StringBuilder isbnValues = new StringBuilder();
         for (Book b : books) {
@@ -55,5 +51,9 @@ class BestCommercialOffer {
             isbnValues.append(b.isbn);
         }
         return isbnValues.toString();
+    }
+
+    public interface Callback<T> {
+        void success(T result);
     }
 }
