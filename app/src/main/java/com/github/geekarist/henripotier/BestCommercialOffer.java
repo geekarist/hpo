@@ -7,21 +7,21 @@ import retrofit.client.Response;
 import timber.log.Timber;
 
 class BestCommercialOffer {
-    private CartDatabaseHelper dbHelper;
-    private PotierApplication.HenriPotier henriPotier;
+    private Cart mCart;
+    private BookResource mBookResource;
 
-    public BestCommercialOffer(CartDatabaseHelper dbHelper, PotierApplication.HenriPotier henriPotier) {
-        this.dbHelper = dbHelper;
-        this.henriPotier = henriPotier;
+    public BestCommercialOffer(Cart mCart, BookResource mBookResource) {
+        this.mCart = mCart;
+        this.mBookResource = mBookResource;
     }
 
     public void apply(final Callback<Integer> callback) {
-        final List<Book> books = dbHelper.books();
+        final List<Book> books = mCart.books();
 
         if (books.isEmpty()) {
             callback.success(0);
         } else {
-            henriPotier.commercialOffers(isbnValues(books), new retrofit.Callback<CommercialOffers>() {
+            mBookResource.commercialOffers(isbnValues(books), new retrofit.Callback<CommercialOffers>() {
                 @Override
                 public void success(CommercialOffers commercialOffers, Response response) {
                     int bestOffer = 0;
@@ -31,7 +31,7 @@ class BestCommercialOffer {
                             bestOffer = discount;
                         }
                     }
-                    callback.success(dbHelper.total() - bestOffer);
+                    callback.success(mCart.total() - bestOffer);
                 }
 
                 @Override

@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -64,7 +62,7 @@ public class CartActivity extends Activity implements CursorAdaptable {
     private void updateTotal() {
         BestCommercialOffer bestCommercialOffer = new BestCommercialOffer(
                 PotierApplication.instance().getDbHelper(),
-                PotierApplication.instance().getHenriPotier());
+                PotierApplication.instance().getBookResource());
         bestCommercialOffer.apply(new BestCommercialOffer.Callback<Integer>() {
             @Override
             public void success(Integer amount) {
