@@ -16,9 +16,9 @@ public class OfferTest {
     public void shouldApplyMinus() {
         // Given
         Offer offer = new Offer(Offer.Type.minus, 10);
-        List<Book> books = Collections.singletonList(new Book(1, "isbn1", "title1", 50, "cover1"));
+        List<Book> books = Collections.singletonList(new Book(1, "isbn1", "title1", 50d, "cover1"));
         // When
-        int amount = offer.apply(books);
+        double amount = offer.apply(books);
         // Then
         Assertions.assertThat(amount).isEqualTo(10);
     }
@@ -27,9 +27,9 @@ public class OfferTest {
     public void shouldApplyPercentage() {
         // Given
         Offer offer = new Offer(Offer.Type.percentage, 10);
-        List<Book> books = Collections.singletonList(new Book(1, "isbn1", "title1", 50, "cover1"));
+        List<Book> books = Collections.singletonList(new Book(1, "isbn1", "title1", 50d, "cover1"));
         // When
-        int amount = offer.apply(books);
+        double amount = offer.apply(books);
         // Then
         Assertions.assertThat(amount).isEqualTo(5);
     }
@@ -38,9 +38,9 @@ public class OfferTest {
     public void shouldApplySlice() {
         // Given
         Offer offer = new Offer(Offer.Type.slice, 10, 5);
-        List<Book> books = Collections.singletonList(new Book(1, "isbn1", "title1", 49, "cover1"));
+        List<Book> books = Collections.singletonList(new Book(1, "isbn1", "title1", 49d, "cover1"));
         // When
-        int amount = offer.apply(books);
+        double amount = offer.apply(books);
         // Then
         Assertions.assertThat(amount).isEqualTo(20);
     }

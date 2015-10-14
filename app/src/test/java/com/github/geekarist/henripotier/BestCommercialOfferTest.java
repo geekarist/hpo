@@ -49,21 +49,21 @@ public class BestCommercialOfferTest {
     @Test
     public void shouldApplyBestOffer() throws Exception {
         // Given
-        allCommercialOffers.offers.add(new Offer(Offer.Type.minus, 10));
-        allCommercialOffers.offers.add(new Offer(Offer.Type.minus, 11));
-        allBooks.add(new Book(0, "isbn", "title", 20, "cover"));
-        given(fakeCart.total()).willReturn(20);
+        allCommercialOffers.offers.add(new Offer(Offer.Type.minus, 10.2));
+        allCommercialOffers.offers.add(new Offer(Offer.Type.minus, 11.4));
+        allBooks.add(new Book(0, "isbn", "title", 20.5, "cover"));
+        given(fakeCart.total()).willReturn(20.5);
 
         // When
-        final Integer[] bestDiscount = {null};
-        bestCommercialOffer.apply(new BestCommercialOffer.Callback<Integer>() {
+        final Double[] bestDiscount = {null};
+        bestCommercialOffer.apply(new BestCommercialOffer.Callback<Double>() {
             @Override
-            public void success(Integer discount) {
+            public void success(Double discount) {
                 bestDiscount[0] = discount;
             }
         });
 
         // Then
-        Assertions.assertThat(bestDiscount[0]).isEqualTo(9);
+        Assertions.assertThat(bestDiscount[0]).isEqualTo(9.1);
     }
 }

@@ -63,9 +63,9 @@ public class CartActivity extends Activity implements CursorAdaptable {
         BestCommercialOffer bestCommercialOffer = new BestCommercialOffer(
                 PotierApplication.instance().getDbHelper(),
                 PotierApplication.instance().getBookResource());
-        bestCommercialOffer.apply(new BestCommercialOffer.Callback<Integer>() {
+        bestCommercialOffer.apply(new BestCommercialOffer.Callback<Double>() {
             @Override
-            public void success(Integer amount) {
+            public void success(Double amount) {
                 mTotalView.setText(getResources().getString(R.string.cart_total, amount));
             }
         });

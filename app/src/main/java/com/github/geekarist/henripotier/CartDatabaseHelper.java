@@ -47,7 +47,7 @@ class CartDatabaseHelper extends SQLiteOpenHelper implements Cart {
         int id = cursor.getInt(0);
         String isbn = cursor.getString(1);
         String title = cursor.getString(2);
-        Integer price = cursor.getInt(3);
+        Double price = cursor.getDouble(3);
         String cover = cursor.getString(4);
         return new Book(id, isbn, title, price, cover);
     }
@@ -64,7 +64,7 @@ class CartDatabaseHelper extends SQLiteOpenHelper implements Cart {
     }
 
     @Override
-    public int total() {
+    public double total() {
         Cursor cursor = getReadableDatabase().rawQuery("SELECT SUM(price) FROM book", null);
         cursor.moveToFirst();
         if (cursor.getCount() == 0) {

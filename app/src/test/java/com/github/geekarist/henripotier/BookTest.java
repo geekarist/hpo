@@ -17,7 +17,7 @@ public class BookTest {
     public void shouldWriteToParcel() {
         // Given
         Parcel dest = Parcel.obtain();
-        Book book = new Book(42, "isbn", "title", 51, "cover");
+        Book book = new Book(42, "isbn", "title", 51d, "cover");
 
         // When
         book.writeToParcel(dest, 0);
@@ -27,7 +27,7 @@ public class BookTest {
         assertThat(dest.readInt()).isEqualTo(42);
         assertThat(dest.readString()).isEqualTo("isbn");
         assertThat(dest.readString()).isEqualTo("title");
-        assertThat(dest.readInt()).isEqualTo(51);
+        assertThat(dest.readDouble()).isEqualTo(51);
         assertThat(dest.readString()).isEqualTo("cover");
     }
 
@@ -38,7 +38,7 @@ public class BookTest {
         source.writeInt(42);
         source.writeString("isbn");
         source.writeString("title");
-        source.writeInt(51);
+        source.writeDouble(51);
         source.writeString("cover");
         source.setDataPosition(0);
 

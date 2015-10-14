@@ -15,18 +15,18 @@ class BestCommercialOffer {
         this.mBookResource = mBookResource;
     }
 
-    public void apply(final Callback<Integer> callback) {
+    public void apply(final Callback<Double> callback) {
         final List<Book> books = mCart.books();
 
         if (books.isEmpty()) {
-            callback.success(0);
+            callback.success(0d);
         } else {
             mBookResource.commercialOffers(isbnValues(books), new retrofit.Callback<CommercialOffers>() {
                 @Override
                 public void success(CommercialOffers commercialOffers, Response response) {
-                    int bestOffer = 0;
+                    double bestOffer = 0;
                     for (Offer offer : commercialOffers.offers) {
-                        int discount = offer.apply(books);
+                        double discount = offer.apply(books);
                         if (discount > bestOffer) {
                             bestOffer = discount;
                         }

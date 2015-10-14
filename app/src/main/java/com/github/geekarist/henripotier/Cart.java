@@ -7,7 +7,7 @@ public interface Cart {
 
     void delete(Book book);
 
-    int total();
+    double total();
 
     List<Book> books();
 }
