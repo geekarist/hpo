@@ -8,13 +8,31 @@
     android:orientation="vertical"
     tools:context=".CartActivity">
 
-    <TextView
-        android:id="@+id/total"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/default_total"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <TextView
+            android:id="@+id/total"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:gravity="right"
+            android:text="@string/default_total"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/suggested_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="50"
+            android:gravity="left"
+            android:text="@string/default_suggested_price"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/continue_shopping"

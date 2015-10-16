@@ -8,8 +8,10 @@
     <string name="continue_shopping">Continue shopping</string>
     <string name="no_data">No data</string>
     <string name="default_total">Total: 0 EUR</string>
+    <string name="default_suggested_price">0 EUR</string>
     <string name="price">%.02f EUR</string>
     <string name="buy_book_msg">You want %s</string>
     <string name="remove_from_cart">Remove from cart</string>
     <string name="cart_total">Total: %.02f EUR</string>
+    <string name="suggested_price">%.02f EUR</string>
 </resources>

@@ -3,6 +3,7 @@ package com.github.geekarist.henripotier;
 import android.app.Activity;
 import android.database.Cursor;
 import android.database.DataSetObserver;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,6 +20,8 @@ public class CartActivity extends Activity implements CursorAdaptable {
     ListView mListView;
     @Bind(R.id.total)
     TextView mTotalView;
+    @Bind(R.id.suggested_price)
+    TextView mSuggestedPriceView;
 
     private CartAdapter mAdapter;
 
@@ -66,6 +69,8 @@ public class CartActivity extends Activity implements CursorAdaptable {
         bestCommercialOffer.apply(new BestCommercialOffer.Callback<Double>() {
             @Override
             public void success(Double amount) {
+                mSuggestedPriceView.setText(getResources().getString(R.string.suggested_price, PotierApplication.instance().getDbHelper().total()));
+                mSuggestedPriceView.setPaintFlags(mSuggestedPriceView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 mTotalView.setText(getResources().getString(R.string.cart_total, amount));
             }
         });
