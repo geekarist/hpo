@@ -12,6 +12,7 @@
     <string name="price">%.02f EUR</string>
     <string name="buy_book_msg">You want %s</string>
     <string name="remove_from_cart">Remove from cart</string>
-    <string name="cart_total">Total: %.02f EUR</string>
-    <string name="suggested_price">%.02f EUR</string>
+    <string name="cart_total">%.02f EUR</string>
+    <string name="suggested_price">%.02f</string>
+    <string name="total_label">Total:</string>
 </resources>

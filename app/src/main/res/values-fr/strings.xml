@@ -10,8 +10,9 @@
     <string name="price">%.02f EUR</string>
     <string name="buy_book_msg">Vous voulez %s</string>
     <string name="remove_from_cart">Enlever du panier</string>
-    <string name="cart_total">Total : %.02f EUR</string>
+    <string name="cart_total">%.02f EUR</string>
     <string name="choose_book">Choisir</string>
-    <string name="suggested_price">%.02f EUR</string>
+    <string name="suggested_price">%.02f</string>
     <string name="default_suggested_price">0 EUR</string>
+    <string name="total_label">Total :</string>
 </resources>
