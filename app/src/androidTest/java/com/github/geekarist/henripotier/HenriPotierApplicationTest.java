@@ -132,7 +132,7 @@ public class HenriPotierApplicationTest extends ActivityInstrumentationTestCase2
 
         // Check total
         Espresso.onView(ViewMatchers.withId(R.id.total))
-                .check(ViewAssertions.matches(ViewMatchers.withText("Total: 33.60 EUR")));
+                .check(ViewAssertions.matches(ViewMatchers.withText("33.60 EUR")));
 
         Espresso.pressBack();
 
@@ -162,7 +162,7 @@ public class HenriPotierApplicationTest extends ActivityInstrumentationTestCase2
 
         // Check total amount
         Espresso.onView(ViewMatchers.withId(R.id.total))
-                .check(ViewAssertions.matches(ViewMatchers.withText("Total: 50.00 EUR")));
+                .check(ViewAssertions.matches(ViewMatchers.withText("50.00 EUR")));
 
         // TODO check name of books
         // TODO check discount
@@ -185,7 +185,7 @@ public class HenriPotierApplicationTest extends ActivityInstrumentationTestCase2
 
         // Amount should be 0
         Espresso.onView(ViewMatchers.withId(R.id.total))
-                .check(ViewAssertions.matches(ViewMatchers.withText("Total: 0.00 EUR")));
+                .check(ViewAssertions.matches(ViewMatchers.withText("0.00 EUR")));
 
         // TODO Cart should be empty
     }
