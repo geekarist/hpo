@@ -1,4 +1,4 @@
 language: android
 android:
     components:
-        extra-android-support
+        - extra-android-support
