@@ -60,8 +60,11 @@ dependencies {
     }
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.1') {
         exclude module: 'support-annotations'
+        exclude module: 'junit'
     }
-    androidTestCompile 'com.squareup.okhttp:mockwebserver:2.5.0'
+    androidTestCompile('com.squareup.okhttp:mockwebserver:2.5.0') {
+        exclude module: 'junit'
+    }
 }
 
 idea {
