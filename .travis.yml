@@ -1,4 +1,7 @@
 language: android
+env:
+    global:
+        - ADB_INSTALL_TIMEOUT=10
 android:
     components:
         - extra-android-support
