@@ -1,6 +1,6 @@
 # Henri Potier
 
-![Build Status](https://travis-ci.org/geekarist/hpo.svg?branch=master)
+![<img src="https://travis-ci.org/geekarist/hpo.svg?branch=master">](https://travis-ci.org/geekarist/hpo)
 
 ## Introduction
 
