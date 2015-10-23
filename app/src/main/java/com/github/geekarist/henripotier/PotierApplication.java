@@ -1,6 +1,7 @@
 package com.github.geekarist.henripotier;
 
 import android.app.Application;
+import android.os.StrictMode;
 
 import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.OkHttpClient;
@@ -37,6 +38,10 @@ public class PotierApplication extends Application {
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
+            StrictMode.setThreadPolicy(
+                    new StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog().build());
+            StrictMode.setVmPolicy(
+                    new StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build());
         }
 
         this.mHenriPotier = createRestAdapter(BuildConfig.HENRI_POTIER_URL);

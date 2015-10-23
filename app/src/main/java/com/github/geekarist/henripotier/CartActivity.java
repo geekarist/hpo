@@ -51,7 +51,10 @@ public class CartActivity extends Activity implements CursorAdaptable {
 
     @Override
     public void releaseCursor() {
-        mAdapter.swapCursor(null);
+        Cursor oldCursor = mAdapter.swapCursor(null);
+        if (oldCursor != null) {
+            oldCursor.close();
+        }
     }
 
     @OnClick(R.id.continue_shopping)

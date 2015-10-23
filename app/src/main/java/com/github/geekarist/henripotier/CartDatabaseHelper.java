@@ -59,11 +59,15 @@ class CartDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public int total() {
+        int total;
         Cursor cursor = getReadableDatabase().rawQuery("SELECT SUM(price) FROM book", null);
         cursor.moveToFirst();
         if (cursor.getCount() == 0) {
-            return 0;
+            total = 0;
+        } else {
+            total = cursor.getInt(0);
         }
-        return cursor.getInt(0);
+        cursor.close();
+        return total;
     }
 }
