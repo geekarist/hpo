@@ -1,5 +1,7 @@
 # Henri Potier
 
+![Build Status](https://travis-ci.org/geekarist/hpo.svg?branch=master)
+
 ## Introduction
 
 Le but de ce document est de décrire le nouvel exercice mobile demandé au candidat lors de leur passage en entretien. Ce document contient le même sujet que la fondation front mais adaptée au mobile :
