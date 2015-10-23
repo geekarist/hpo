@@ -1,9 +1,10 @@
 language: android
 env:
     global:
-        - ADB_INSTALL_TIMEOUT=10
+        - ADB_INSTALL_TIMEOUT=15
 android:
     components:
+        - build-tools-21
         - extra-android-support
         - extra-android-m2repository
         - sys-img-armeabi-v7a-android-21
