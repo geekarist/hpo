@@ -6,9 +6,6 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
-import android.support.test.espresso.action.ViewActions;
-import android.support.test.espresso.assertion.ViewAssertions;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 
@@ -19,14 +16,23 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
 
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.instanceOf;
+
 // TODO disable analytics in test runner: http://goo.gl/LVedbO
+@SuppressWarnings("unchecked")
 public class HenriPotierApplicationTest extends ActivityInstrumentationTestCase2<CatalogActivity> {
     private final MockWebServer fakeWebServer;
     private CatalogActivity mActivity;
@@ -114,78 +120,78 @@ public class HenriPotierApplicationTest extends ActivityInstrumentationTestCase2
 
     public void testShouldAllowBuyingBooks() throws InterruptedException, IOException {
         // Wait for catalog
-        Espresso.onView(ViewMatchers.isRoot()).perform(new WaitFor(3000));
+        Espresso.onView(isRoot()).perform(new WaitFor(3000));
 
         // TODO check catalog list size: http://stackoverflow.com/a/30361345/1665730
 
         // Choose first book
-        Espresso.onData(Matchers.instanceOf(Book.class))
-                .inAdapterView(Matchers.allOf(ViewMatchers.withId(R.id.list), ViewMatchers.isDisplayed()))
+        Espresso.onData(instanceOf(Book.class))
+                .inAdapterView(allOf(withId(R.id.list), isDisplayed()))
                 .atPosition(0)
-                .onChildView(ViewMatchers.withId(R.id.book_selection_button))
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-                .perform(ViewActions.click());
+                .onChildView(withId(R.id.book_selection_button))
+                .check(matches(isDisplayed()))
+                .perform(click());
 
         // Cart should be displayed
-        Espresso.onView(ViewMatchers.withId(R.id.cart_list))
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.onView(withId(R.id.cart_list))
+                .check(matches(isDisplayed()));
 
         // Check total
-        Espresso.onView(ViewMatchers.withId(R.id.total))
-                .check(ViewAssertions.matches(ViewMatchers.withText("33.60 EUR")));
+        Espresso.onView(withId(R.id.total))
+                .check(matches(withText("33.60 EUR")));
 
         Espresso.pressBack();
 
         // Choose second book
-        Espresso.onData(Matchers.instanceOf(Book.class))
-                .inAdapterView(Matchers.allOf(ViewMatchers.withId(R.id.list), ViewMatchers.isDisplayed()))
+        Espresso.onData(instanceOf(Book.class))
+                .inAdapterView(allOf(withId(R.id.list), isDisplayed()))
                 .atPosition(1)
-                .onChildView(ViewMatchers.withId(R.id.book_selection_button))
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-                .perform(ViewActions.click());
+                .onChildView(withId(R.id.book_selection_button))
+                .check(matches(isDisplayed()))
+                .perform(click());
 
         // Cart should be displayed
-        Espresso.onView(ViewMatchers.withId(R.id.cart_list))
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.onView(withId(R.id.cart_list))
+                .check(matches(isDisplayed()));
 
         // First book should be in Cart
-        Espresso.onData(Matchers.instanceOf(Cursor.class))
-                .inAdapterView(Matchers.allOf(ViewMatchers.withId(R.id.cart_list), ViewMatchers.isDisplayed()))
+        Espresso.onData(instanceOf(Cursor.class))
+                .inAdapterView(allOf(withId(R.id.cart_list), isDisplayed()))
                 .atPosition(0)
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+                .check(matches(isDisplayed()));
 
         // Second book should be in Cart
-        Espresso.onData(Matchers.instanceOf(Cursor.class))
-                .inAdapterView(Matchers.allOf(ViewMatchers.withId(R.id.cart_list), ViewMatchers.isDisplayed()))
+        Espresso.onData(instanceOf(Cursor.class))
+                .inAdapterView(allOf(withId(R.id.cart_list), isDisplayed()))
                 .atPosition(1)
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+                .check(matches(isDisplayed()));
 
         // Check total amount
-        Espresso.onView(ViewMatchers.withId(R.id.total))
-                .check(ViewAssertions.matches(ViewMatchers.withText("50.00 EUR")));
+        Espresso.onView(withId(R.id.total))
+                .check(matches(withText("50.00 EUR")));
 
         // TODO check name of books
         // TODO check discount
 
         // Remove first book from cart
-        Espresso.onData(Matchers.instanceOf(Cursor.class))
-                .inAdapterView(Matchers.allOf(ViewMatchers.withId(R.id.cart_list), ViewMatchers.isDisplayed()))
+        Espresso.onData(instanceOf(Cursor.class))
+                .inAdapterView(allOf(withId(R.id.cart_list), isDisplayed()))
                 .atPosition(0)
-                .onChildView(ViewMatchers.withId(R.id.book_selection_button))
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-                .perform(ViewActions.click());
+                .onChildView(withId(R.id.book_selection_button))
+                .check(matches(isDisplayed()))
+                .perform(click());
 
         // Remove second book from cart
-        Espresso.onData(Matchers.instanceOf(Cursor.class))
-                .inAdapterView(Matchers.allOf(ViewMatchers.withId(R.id.cart_list), ViewMatchers.isDisplayed()))
+        Espresso.onData(instanceOf(Cursor.class))
+                .inAdapterView(allOf(withId(R.id.cart_list), isDisplayed()))
                 .atPosition(0)
-                .onChildView(ViewMatchers.withId(R.id.book_selection_button))
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-                .perform(ViewActions.click());
+                .onChildView(withId(R.id.book_selection_button))
+                .check(matches(isDisplayed()))
+                .perform(click());
 
         // Amount should be 0
-        Espresso.onView(ViewMatchers.withId(R.id.total))
-                .check(ViewAssertions.matches(ViewMatchers.withText("0.00 EUR")));
+        Espresso.onView(withId(R.id.total))
+                .check(matches(withText("0.00 EUR")));
 
         // TODO Cart should be empty
     }
@@ -200,7 +206,7 @@ public class HenriPotierApplicationTest extends ActivityInstrumentationTestCase2
 
         @Override
         public Matcher<View> getConstraints() {
-            return ViewMatchers.isRoot();
+            return isRoot();
         }
 
         @Override
