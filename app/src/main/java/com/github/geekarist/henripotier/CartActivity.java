@@ -7,10 +7,12 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 public class CartActivity extends Activity implements CursorAdaptable {
 
@@ -63,15 +65,25 @@ public class CartActivity extends Activity implements CursorAdaptable {
     }
 
     private void updateTotal() {
+        double total = PotierApplication.instance().getDbHelper().total();
+        final String totalStr = getResources().getString(R.string.suggested_price, total);
+        mSuggestedPriceView.setText(totalStr);
+
         BestCommercialOffer bestCommercialOffer = new BestCommercialOffer(
                 PotierApplication.instance().getDbHelper(),
                 PotierApplication.instance().getBookResource());
         bestCommercialOffer.apply(new BestCommercialOffer.Callback<Double>() {
             @Override
             public void success(Double amount) {
-                mSuggestedPriceView.setText(getResources().getString(R.string.suggested_price, PotierApplication.instance().getDbHelper().total()));
                 mSuggestedPriceView.setPaintFlags(mSuggestedPriceView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 mTotalView.setText(getResources().getString(R.string.cart_total, amount));
+            }
+
+            @Override
+            public void error(String message, Exception cause) {
+                mTotalView.setText(totalStr);
+                Timber.e(cause, message);
+                Toast.makeText(CartActivity.this, message, Toast.LENGTH_LONG).show();
             }
         });
     }

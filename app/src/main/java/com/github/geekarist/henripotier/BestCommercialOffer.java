@@ -4,7 +4,6 @@ import java.util.List;
 
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import timber.log.Timber;
 
 class BestCommercialOffer {
     private Cart mCart;
@@ -36,7 +35,7 @@ class BestCommercialOffer {
 
                 @Override
                 public void failure(RetrofitError error) {
-                    Timber.e(error, "Error while retrieving commercial offers");
+                    callback.error("Error while retrieving commercial offers", error);
                 }
             });
         }
@@ -53,7 +52,13 @@ class BestCommercialOffer {
         return isbnValues.toString();
     }
 
+    void setBookResource(BookResource bookResource) {
+        this.mBookResource = bookResource;
+    }
+
     public interface Callback<T> {
         void success(T result);
+
+        void error(String message, Exception cause);
     }
 }
