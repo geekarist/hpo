@@ -56,7 +56,10 @@ public class CartAdapter extends CursorAdapter {
 
     public void notifyChange() {
         Cursor cursor = mDbHelper.createCursor();
-        swapCursor(cursor);
+        Cursor oldCursor = swapCursor(cursor);
+        if (oldCursor != null) {
+            oldCursor.close();
+        }
         notifyDataSetChanged();
     }
 

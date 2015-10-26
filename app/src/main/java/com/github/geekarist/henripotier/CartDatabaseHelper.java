@@ -65,12 +65,16 @@ class CartDatabaseHelper extends SQLiteOpenHelper implements Cart {
 
     @Override
     public double total() {
+        double total;
         Cursor cursor = getReadableDatabase().rawQuery("SELECT SUM(price) FROM book", null);
         cursor.moveToFirst();
         if (cursor.getCount() == 0) {
-            return 0;
+            total = 0;
+        } else {
+            total = cursor.getInt(0);
         }
-        return cursor.getInt(0);
+        cursor.close();
+        return total;
     }
 
     @Override
