@@ -1,4 +1,5 @@
 language: android
+cache: false
 env:
     global:
         - ADB_INSTALL_TIMEOUT=15
