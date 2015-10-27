@@ -4,6 +4,5 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommercialOffers {
-    public List<Offer> offers = new ArrayList<>();
-
+    public final List<Offer> offers = new ArrayList<>();
 }
