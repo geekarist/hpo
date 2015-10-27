@@ -86,6 +86,7 @@ class CartDatabaseHelper extends SQLiteOpenHelper implements Cart {
             result.add(getBook(cursor));
             hasNext = cursor.moveToNext();
         }
+        cursor.close();
         return result;
     }
 }
