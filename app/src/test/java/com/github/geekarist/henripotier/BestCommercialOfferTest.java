@@ -27,7 +27,6 @@ public class BestCommercialOfferTest {
     public void setup() {
         allBooks = new ArrayList<>();
         allCommercialOffers = new CommercialOffers();
-        allCommercialOffers.offers = new ArrayList<>();
 
         fakeCart = mock(Cart.class);
         given(fakeCart.books()).willReturn(allBooks);

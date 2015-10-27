@@ -6,21 +6,21 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 class BestCommercialOffer {
-    private Cart mCart;
-    private BookResource mBookResource;
+    private Cart cart;
+    private BookResource bookResource;
 
-    public BestCommercialOffer(Cart mCart, BookResource mBookResource) {
-        this.mCart = mCart;
-        this.mBookResource = mBookResource;
+    public BestCommercialOffer(Cart cart, BookResource bookResource) {
+        this.cart = cart;
+        this.bookResource = bookResource;
     }
 
     public void apply(final Callback<Double> callback) {
-        final List<Book> books = mCart.books();
+        final List<Book> books = cart.books();
 
         if (books.isEmpty()) {
             callback.success(0d);
         } else {
-            mBookResource.commercialOffers(isbnValues(books), new retrofit.Callback<CommercialOffers>() {
+            bookResource.commercialOffers(isbnValues(books), new retrofit.Callback<CommercialOffers>() {
                 @Override
                 public void success(CommercialOffers commercialOffers, Response response) {
                     double bestOffer = 0;
@@ -30,7 +30,7 @@ class BestCommercialOffer {
                             bestOffer = discount;
                         }
                     }
-                    callback.success(mCart.total() - bestOffer);
+                    callback.success(cart.total() - bestOffer);
                 }
 
                 @Override
@@ -53,7 +53,7 @@ class BestCommercialOffer {
     }
 
     void setBookResource(BookResource bookResource) {
-        this.mBookResource = bookResource;
+        this.bookResource = bookResource;
     }
 
     public interface Callback<T> {
