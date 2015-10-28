@@ -1,11 +1,15 @@
 package com.github.geekarist.henripotier;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 
@@ -14,13 +18,18 @@ import com.squareup.okhttp.mockwebserver.Dispatcher;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
+import com.squareup.spoon.Spoon;
 
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+
+import timber.log.Timber;
 
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -98,6 +107,20 @@ public class HenriPotierApplicationTest extends ActivityInstrumentationTestCase2
         });
     }
 
+    private static Activity getActivity(View view) {
+        Context context = view.getContext();
+        while (!(context instanceof Activity)) {
+            if (context instanceof ContextWrapper) {
+                context = ((ContextWrapper) context).getBaseContext();
+            } else {
+                throw new IllegalStateException("Got a context of class "
+                        + context.getClass()
+                        + " and I don't know how to get the Activity from it");
+            }
+        }
+        return (Activity) context;
+    }
+
     @NonNull
     private String urlEncode(String url) {
         try {
@@ -116,7 +139,6 @@ public class HenriPotierApplicationTest extends ActivityInstrumentationTestCase2
         super.setUp();
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
         mActivity = getActivity();
-        Espresso.setFailureHandler(new ViewDebugFailureHandler(InstrumentationRegistry.getTargetContext(), mActivity));
     }
 
     public void testShouldAllowBuyingBooks() throws InterruptedException, IOException {
@@ -137,9 +159,8 @@ public class HenriPotierApplicationTest extends ActivityInstrumentationTestCase2
         Espresso.onView(withId(R.id.cart_list))
                 .check(matches(isDisplayed()));
 
-        // Check total
-        Espresso.onView(withId(R.id.total))
-                .check(matches(withText("33.60 EUR")));
+        captureScreen();
+        Espresso.onView(withId(R.id.total)).check(matches(withText("33.60 EUR")));
 
         Espresso.pressBack();
 
@@ -195,6 +216,31 @@ public class HenriPotierApplicationTest extends ActivityInstrumentationTestCase2
                 .check(matches(withText("0.00 EUR")));
 
         // TODO Cart should be empty
+    }
+
+    private void captureScreen() {
+        StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+        final String testClass = trace[3].getClassName();
+        final String testMethod = trace[3].getMethodName();
+
+        // Check total
+        Espresso.onView(ViewMatchers.isRoot()).perform(new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return Matchers.anything();
+            }
+
+            @Override
+            public String getDescription() {
+                return "Taking a screenshot";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                File captureFile = Spoon.screenshot(getActivity(view), "PotierApplicationTest", testClass, testMethod);
+                Timber.i("Screen captured to: %s", captureFile.getPath());
+            }
+        });
     }
 
     private static class WaitFor implements ViewAction {

@@ -65,6 +65,7 @@ dependencies {
     androidTestCompile('com.squareup.okhttp:mockwebserver:2.5.0') {
         exclude module: 'junit'
     }
+    androidTestCompile('com.squareup.spoon:spoon-client:1.2.0')
 }
 
 idea {
