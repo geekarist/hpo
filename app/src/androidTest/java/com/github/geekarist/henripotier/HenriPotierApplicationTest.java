@@ -116,6 +116,7 @@ public class HenriPotierApplicationTest extends ActivityInstrumentationTestCase2
         super.setUp();
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
         mActivity = getActivity();
+        Espresso.setFailureHandler(new ViewDebugFailureHandler(InstrumentationRegistry.getTargetContext(), mActivity));
     }
 
     public void testShouldAllowBuyingBooks() throws InterruptedException, IOException {
