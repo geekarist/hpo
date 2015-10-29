@@ -143,7 +143,7 @@ public class HenriPotierApplicationTest extends ActivityInstrumentationTestCase2
 
     public void testShouldAllowBuyingBooks() throws InterruptedException, IOException {
         // Wait for catalog
-        Espresso.onView(isRoot()).perform(new WaitFor(3000));
+        Espresso.onView(isRoot()).perform(new WaitFor(15000));
 
         // TODO check catalog list size: http://stackoverflow.com/a/30361345/1665730
 
