@@ -3,13 +3,16 @@ package com.github.geekarist.henripotier;
 import android.app.Activity;
 import android.database.Cursor;
 import android.database.DataSetObserver;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 public class CartActivity extends Activity implements CursorAdaptable {
 
@@ -19,6 +22,8 @@ public class CartActivity extends Activity implements CursorAdaptable {
     ListView mListView;
     @Bind(R.id.total)
     TextView mTotalView;
+    @Bind(R.id.suggested_price)
+    TextView mSuggestedPriceView;
 
     private CartAdapter mAdapter;
 
@@ -63,8 +68,27 @@ public class CartActivity extends Activity implements CursorAdaptable {
     }
 
     private void updateTotal() {
-        mTotalView.setText(getResources().getString(
-                R.string.cart_total, PotierApplication.instance().getDbHelper().total()));
+        double total = PotierApplication.instance().getDbHelper().total();
+        final String totalStr = getResources().getString(R.string.suggested_price, total);
+        mSuggestedPriceView.setText(totalStr);
+
+        BestCommercialOffer bestCommercialOffer = new BestCommercialOffer(
+                PotierApplication.instance().getDbHelper(),
+                PotierApplication.instance().getBookResource());
+        bestCommercialOffer.apply(new BestCommercialOffer.Callback<Double>() {
+            @Override
+            public void success(Double amount) {
+                mSuggestedPriceView.setPaintFlags(mSuggestedPriceView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                mTotalView.setText(getResources().getString(R.string.cart_total, amount));
+            }
+
+            @Override
+            public void error(String message, Exception cause) {
+                mTotalView.setText(totalStr);
+                Timber.e(cause, message);
+                Toast.makeText(CartActivity.this, message, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 }

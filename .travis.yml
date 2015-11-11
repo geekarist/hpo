@@ -1,10 +1,11 @@
 language: android
+cache: false
 env:
     global:
         - ADB_INSTALL_TIMEOUT=15
 android:
     components:
-        - build-tools-21
+        - build-tools-21.1.2
         - extra-android-support
         - extra-android-m2repository
         - sys-img-armeabi-v7a-android-21
@@ -14,4 +15,4 @@ before_script:
     - android-wait-for-emulator
     - adb shell input keyevent 82 &
 script:
-    - ./gradlew test connectedCheck -PdisablePreDex
+    - travis_wait ./gradlew clean test connectedCheck

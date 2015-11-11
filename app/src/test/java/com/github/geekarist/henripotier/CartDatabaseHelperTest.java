@@ -17,7 +17,7 @@ public class CartDatabaseHelperTest {
         given(cursorMock.getInt(0)).willReturn(42);
         given(cursorMock.getString(1)).willReturn("isbn");
         given(cursorMock.getString(2)).willReturn("title");
-        given(cursorMock.getInt(3)).willReturn(51);
+        given(cursorMock.getDouble(3)).willReturn(51d);
         given(cursorMock.getString(4)).willReturn("cover");
 
         Book book = dbHelper.getBook(cursorMock);

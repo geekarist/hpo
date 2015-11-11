@@ -42,7 +42,7 @@ public class CatalogActivity extends Activity {
         super.onStart();
 
         // Download books
-        mApplication.getHenriPotier().books(new Callback<List<Book>>() {
+        mApplication.getBookResource().books(new Callback<List<Book>>() {
             @Override
             public void success(List<Book> books, Response response) {
                 mAdapter.addAll(books);

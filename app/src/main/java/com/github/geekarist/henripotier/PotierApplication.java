@@ -6,12 +6,8 @@ import android.os.StrictMode;
 import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.OkHttpClient;
 
-import java.util.List;
-
-import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
-import retrofit.http.GET;
 import timber.log.Timber;
 
 public class PotierApplication extends Application {
@@ -20,7 +16,7 @@ public class PotierApplication extends Application {
 
     private static PotierApplication instance;
 
-    private HenriPotier mHenriPotier;
+    private BookResource mBookResource;
     private CartDatabaseHelper mDbHelper;
 
     public PotierApplication() {
@@ -44,21 +40,21 @@ public class PotierApplication extends Application {
                     new StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build());
         }
 
-        this.mHenriPotier = createRestAdapter(BuildConfig.HENRI_POTIER_URL);
+        this.mBookResource = createRestAdapter(BuildConfig.HENRI_POTIER_URL);
         this.mDbHelper = new CartDatabaseHelper(this, null, null, 1);
     }
 
-    private HenriPotier createRestAdapter(String url) {
+    private BookResource createRestAdapter(String url) {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(url)
                 .setClient(new OkClient(new OkHttpClient()))
                 .build();
 
-        return restAdapter.create(HenriPotier.class);
+        return restAdapter.create(BookResource.class);
     }
 
-    public HenriPotier getHenriPotier() {
-        return mHenriPotier;
+    public BookResource getBookResource() {
+        return mBookResource;
     }
 
     public CartDatabaseHelper getDbHelper() {
@@ -66,13 +62,7 @@ public class PotierApplication extends Application {
     }
 
     public void changeHenriPotierUrl(HttpUrl url) {
-        mHenriPotier = createRestAdapter(url.toString());
-    }
-
-    public interface HenriPotier {
-
-        @GET("/books")
-        void books(Callback<List<Book>> doOnBooks);
+        mBookResource = createRestAdapter(url.toString());
     }
 
 }
