@@ -16,3 +16,8 @@ before_script:
     - adb shell input keyevent 82 &
 script:
     - travis_wait ./gradlew clean test connectedCheck
+    - ./bin/save-reports.sh
+addons:
+    apt:
+        packages:
+        - ncftp
