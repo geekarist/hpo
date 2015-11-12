@@ -159,7 +159,6 @@ public class HenriPotierApplicationTest extends ActivityInstrumentationTestCase2
         Espresso.onView(withId(R.id.cart_list))
                 .check(matches(isDisplayed()));
 
-        captureScreen();
         Espresso.onView(withId(R.id.total)).check(matches(withText("33.60 EUR")));
 
         Espresso.pressBack();
