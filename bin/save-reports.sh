@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu
+set -euv
 
 test -d app/build/spoon
 tar zcf app/build/spoon.tgz app/build/spoon
