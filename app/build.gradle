@@ -1,6 +1,18 @@
 apply plugin: 'com.android.application'
 apply plugin: 'idea'
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.stanfy.spoon:spoon-gradle-plugin:1.0.2'
+    }
+}
+
+apply plugin: 'spoon'
+
 android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
