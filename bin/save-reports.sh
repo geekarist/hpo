@@ -2,7 +2,7 @@
 
 set -eu
 
-tree
+tree -d
 
 if test -d ./app/build/spoon ; then
 	tar zcf ./app/build/spoon.tgz ./app/build/spoon
