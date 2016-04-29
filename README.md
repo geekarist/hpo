@@ -1,8 +1,10 @@
 # Henri Potier
 
+<!--
 <a href="https://travis-ci.org/geekarist/hpo">
 <img src="https://travis-ci.org/geekarist/hpo.svg?branch=master">
 </a>
+-->
 
 ## Introduction
 
